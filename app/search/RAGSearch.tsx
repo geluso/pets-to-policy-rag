@@ -3,11 +3,13 @@
 import { useSearchParams } from "next/navigation"
 import { useState } from "react"
 import { getResults } from "./actions"
+import { Document } from "@prisma/client"
+import WALawDocument from "./WALawDocument"
 
 export default function RagSearch() {
   const searchParams = useSearchParams()
   const [q, setQ ] = useState(searchParams.get('q') ?? '')
-  const [results, setResults] = useState<string[]>([])
+  const [results, setResults] = useState<Document[]>([])
 
   const handleSubmit = (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault()
@@ -29,8 +31,6 @@ export default function RagSearch() {
     <p>LLM gibberish</p>
 
     <h2>Sources</h2>
-    <ul>
-      {results.map(result => <li key={result}>{result}</li>)}
-    </ul>
+    {results.map(doc => <WALawDocument key={doc.id} doc={doc} /> )}
   </div>
 }
