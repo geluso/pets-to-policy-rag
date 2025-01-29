@@ -1,5 +1,6 @@
+"use server"
+
 export async function getResults(text: string) {
-  console.log('get results', text)
   return [
     "Public schools means the common schools as referred to in Article IX of the state Constitution, charter schools established under chapter 28A.710 RCW, and those schools and institutions of learning having a curriculum below the college or university level as now or may be established by law and maintained at public expense.",
     "Common schools means schools maintained at public expense in each school district and carrying on a program from kindergarten through the twelfth grade or any part thereof including vocational educational courses otherwise permitted by law.",
