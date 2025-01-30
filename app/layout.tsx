@@ -29,7 +29,8 @@ export default function RootLayout({
       >
         <nav>
           <a href="/search">Search</a>{' '}
-          <a href="/add">Add Document</a>
+          <a href="/add">Add Document</a>{' '}
+          <a href="/chat">Chat</a>
         </nav>
         {children}
       </body>
