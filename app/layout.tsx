@@ -27,6 +27,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <nav>
+          <a href="/search">Search</a>{' '}
+          <a href="/add">Add Document</a>
+        </nav>
         {children}
       </body>
     </html>
