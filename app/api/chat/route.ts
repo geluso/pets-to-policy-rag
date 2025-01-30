@@ -1,6 +1,6 @@
 'use server'
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { ChatOpenAI } from '@langchain/openai'
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 
@@ -27,8 +27,8 @@ export async function POST(req: NextRequest) {
         if (done) break;
         
         // Convert AIMessageChunk to a string before streaming
-        const textChunk = value.toString(); 
-        controller.enqueue(encoder.encode(value.content.toString()));
+        const textChunk = value.content.toString(); 
+        controller.enqueue(encoder.encode(textChunk));
       }
       controller.close();
     }
