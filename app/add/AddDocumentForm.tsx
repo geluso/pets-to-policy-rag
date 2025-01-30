@@ -14,10 +14,14 @@ export default function AddDocumentForm() {
 
   const handleSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault()
-    const form = ev.currentTarget.elements
-    const url = form.url.value as string
-    const title = form.title.value as string
-    const text = form.text.value as string
+    const form = ev.currentTarget.elements as HTMLFormControlsCollection & {
+      url: HTMLInputElement
+      title: HTMLInputElement 
+      text: HTMLTextAreaElement
+    }
+    const url = form.url.value
+    const title = form.title.value
+    const text = form.text.value
     createDocument({ url, title, text }).then(addDoc)
   }
 
