@@ -10,9 +10,14 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@langchain/cohere": "^0.3.2",
+    "@langchain/community": "^0.3.28",
     "@langchain/core": "^0.3.37",
+    "@langchain/ollama": "^0.1.5",
     "@langchain/openai": "^0.4.2",
+    "@neondatabase/serverless": "^0.10.4",
     "@prisma/client": "^6.3.0",
+    "@vercel/postgres": "^0.10.0",
     "langchain": "^0.3.15",
     "next": "15.1.6",
     "react": "^19.0.0",

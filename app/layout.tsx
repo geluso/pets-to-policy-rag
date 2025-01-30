@@ -30,7 +30,8 @@ export default function RootLayout({
         <nav>
           <a href="/search">Search</a>{' '}
           <a href="/add">Add Document</a>{' '}
-          <a href="/chat">Chat</a>
+          <a href="/chat">Chat</a>{' '}
+          <a href="/embeddings">Embeddings</a>
         </nav>
         {children}
       </body>
