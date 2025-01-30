@@ -1,5 +1,8 @@
+import ClientWrapper from "./ClientWrapper";
 import RagSearch from "./RAGSearch";
 
 export default async function Search() {
-  return <RagSearch />
+  return <ClientWrapper>
+    <RagSearch />
+  </ClientWrapper>
 }
