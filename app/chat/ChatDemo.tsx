@@ -12,7 +12,7 @@ export default function ChatDemo() {
     <h2>Chat</h2>
     <p>
       <input value={topic} onChange={(ev) => setTopic(ev.target.value)} type="text" />
-      <button onClick={() => startStreaming(topic)}>chat</button>
+      <button onClick={() => startStreaming(topic, [])}>chat</button>
     </p>
     
     <h2>Reply</h2>

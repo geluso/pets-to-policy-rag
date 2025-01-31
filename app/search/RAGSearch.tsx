@@ -2,18 +2,34 @@
 
 import { useSearchParams } from "next/navigation"
 import { useState } from "react"
-import { getResults } from "./actions"
+import { similaritySearch } from "./actions"
 import { Document } from "@prisma/client"
 import WALawDocument from "./WALawDocument"
+import { DocumentInterface } from "@langchain/core/documents"
+import { useStreamChat } from "../chat/useStreamChat"
+
+type SearchResult = {
+  docs: {
+      id: string;
+      url: string;
+      title: string;
+      text: string;
+  }[];
+  matches: DocumentInterface<Record<string, any>>[];
+}
 
 export default function RagSearch() {
   const searchParams = useSearchParams()
   const [q, setQ ] = useState(searchParams.get('q') ?? '')
-  const [results, setResults] = useState<Document[]>([])
+  const [results, setResults] = useState<any>([])
+  const { response, isLoading, isStreaming, startStreaming } = useStreamChat()
 
-  const handleSubmit = (ev: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault()
-    getResults(q).then(setResults)
+    const results = await similaritySearch(q)
+    setResults(results)
+    console.log('search results:', results)
+    startStreaming(q, results)
   }
   
   return <div>
@@ -28,9 +44,21 @@ export default function RagSearch() {
     <p>Searching for {q}</p>
 
     <h2>Answer</h2>
-    <p>LLM gibberish</p>
+    <p>Loading?: {'' + isLoading}</p>
+    <p>Streaming?: {'' + isStreaming}</p>
+    <p>{response}</p>
 
     <h2>Sources</h2>
-    {results.map(doc => <WALawDocument key={doc.id} doc={doc} /> )}
+    {results.map((doc: any) => {
+      return <div key={doc.id}>
+        <div className="border border-solid border-black mb-2 p-2">
+          <h3>{doc.title}</h3>
+          <p>{doc.text}</p>
+          <p>
+            <a href={doc.url}>{doc.url}</a>
+          </p>
+        </div>
+      </div>
+    })}
   </div>
 }

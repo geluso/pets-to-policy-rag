@@ -1,3 +1,4 @@
+import { Document } from '@prisma/client'
 import { useState, useCallback } from 'react'
 
 export function useStreamChat() {
@@ -5,7 +6,7 @@ export function useStreamChat() {
     const [isLoading, setIsLoading] = useState(false)
     const [isStreaming, setIsStreaming] = useState(false)
 
-    const startStreaming = useCallback(async (topic: string) => {
+    const startStreaming = useCallback(async (query: string, docs: Document[]) => {
         console.log('startStreaming')
         setResponse('')
         setIsLoading(true)
@@ -14,7 +15,7 @@ export function useStreamChat() {
         const response = await fetch('/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ topic }),
+            body: JSON.stringify({ query, docs }),
         })
 
         if (!response.body) {
