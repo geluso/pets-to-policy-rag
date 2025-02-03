@@ -3,7 +3,6 @@
 import prisma from "@/lib/prisma"
 import { OpenAIEmbeddings } from '@langchain/openai'
 import { NeonPostgres } from "@langchain/community/vectorstores/neon";
-import { Document } from "@prisma/client";
 
 const embeddings = new OpenAIEmbeddings({
   apiKey: process.env.OPENAI_API_KEY,

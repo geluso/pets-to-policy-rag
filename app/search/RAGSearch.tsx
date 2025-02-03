@@ -1,22 +1,12 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint-disable  @typescript-eslint/no-unused-vars */
+
 "use client"
 
 import { useSearchParams } from "next/navigation"
 import { useState } from "react"
 import { similaritySearch } from "./actions"
-import { Document } from "@prisma/client"
-import WALawDocument from "./WALawDocument"
-import { DocumentInterface } from "@langchain/core/documents"
 import { useStreamChat } from "../chat/useStreamChat"
-
-type SearchResult = {
-  docs: {
-      id: string;
-      url: string;
-      title: string;
-      text: string;
-  }[];
-  matches: DocumentInterface<Record<string, any>>[];
-}
 
 export default function RagSearch() {
   const searchParams = useSearchParams()
