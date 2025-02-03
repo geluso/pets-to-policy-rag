@@ -56,6 +56,7 @@ export default function AddDocumentForm() {
       <table border={1}>
         <thead>
           <tr>
+            <th>ID</th>
             <th>URL</th>
             <th>Title</th>
             <th>Text</th>
@@ -64,6 +65,7 @@ export default function AddDocumentForm() {
         <tbody>
           {allDocs.map(doc => (
             <tr key={doc.id}>
+              <td>{doc.id}</td>
               <td>{doc.url}</td>
               <td>{doc.title}</td>
               <td>{doc.text}</td>

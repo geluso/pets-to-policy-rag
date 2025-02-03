@@ -13,14 +13,19 @@ const vectorStore = await NeonPostgres.initialize(embeddings, {
   connectionString: process.env.DATABASE_URL as string,
 });
 
-export async function similaritySearch(query: string) {
-  const matches = await vectorStore.similaritySearch(query, 2);
-  const docIds = matches.map(match => match.metadata.documentId)
-  console.log('doc IDs:', docIds)
-  const docs = await prisma.document.findMany({ where: { id: { in: docIds } }})
-  return docs
-}
-
-export async function llmSummarize(query: string, docs: Document[]) {
-
+export async function similaritySearch(query: string, threshold = 0.3) {
+  const matches = await vectorStore.similaritySearchWithScore(query, 10); // Get up to 10 matches with scores
+  console.log('All matches:', matches);
+  // Filter matches where the score is BELOW the threshold (closer match)
+  const filteredMatches = matches.filter(([_, score]) => score <= threshold);
+  if (filteredMatches.length === 0) {
+    return [];
+  }
+  const docIds = filteredMatches.map(([match]) => match.metadata.documentId);
+  console.log('Filtered matches:', filteredMatches);
+  console.log('Doc IDs:', docIds);
+  const docs = await prisma.document.findMany({
+    where: { id: { in: docIds } }
+  });
+  return docs;
 }

@@ -26,10 +26,10 @@ export default function RagSearch() {
 
   const handleSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault()
-    const results = await similaritySearch(q)
-    setResults(results)
-    console.log('search results:', results)
-    startStreaming(q, results)
+    const docs = await similaritySearch(q)
+    setResults(docs)
+    console.log('search results:', docs)
+    startStreaming(q, docs)
   }
   
   return <div>
@@ -41,11 +41,8 @@ export default function RagSearch() {
       <button type="submit">Submit</button>
     </form>
 
-    <p>Searching for {q}</p>
-
     <h2>Answer</h2>
-    <p>Loading?: {'' + isLoading}</p>
-    <p>Streaming?: {'' + isStreaming}</p>
+    {isLoading && <p>Loading...</p>}
     <p>{response}</p>
 
     <h2>Sources</h2>
