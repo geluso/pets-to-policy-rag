@@ -14,11 +14,6 @@ export async function POST(req: NextRequest) {
   const { query, docs } = await req.json()
   console.log('/api/chat', { query, docs })
 
-  // const messages = [
-  //   new SystemMessage(`This is the user query = ${query}`),
-  //   ...docs.map((doc: Document) => new SystemMessage(`This is a found document: ${doc.text}`)),
-  //   new HumanMessage('answer the given query using specific references from the given found documents')
-  // ];
   const messages = [
     new SystemMessage(`This is the user query = ${query ?? "No query provided"}`),
     ...(docs?.map((doc: Document) => new SystemMessage(`This is a found document: ${doc.text}`)) || []),

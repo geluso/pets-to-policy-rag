@@ -22,7 +22,7 @@ export async function similaritySearch(query: string, threshold = 0.3) {
   if (filteredMatches.length === 0) {
     return [];
   }
-  const docIds = filteredMatches.map(([match]) => match.metadata.documentId);
+  const docIds = filteredMatches.map(([match]) => match.metadata.documentId).filter(id => !!id)
   console.log('Filtered matches:', filteredMatches);
   console.log('Doc IDs:', docIds);
   const docs = await prisma.document.findMany({
