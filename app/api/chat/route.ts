@@ -3,7 +3,7 @@
 import { NextRequest } from 'next/server'
 import { ChatOpenAI } from '@langchain/openai'
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { Document } from '@prisma/client';
+import { SearchResult } from '@/app/rag_server/api';
 
 const model = new ChatOpenAI({
     openAIApiKey: process.env.OPENAI_API_KEY,
@@ -11,12 +11,14 @@ const model = new ChatOpenAI({
 })
 
 export async function POST(req: NextRequest) {
-  const { query, docs } = await req.json()
-  console.log('/api/chat', { query, docs })
+  const json = await req.json()
+  const query = json.query
+  const results = json.results as SearchResult[]
+  console.log('/api/chat', { query, results })
 
   const messages = [
     new SystemMessage(`This is the user query = ${query ?? "No query provided"}`),
-    ...(docs?.map((doc: Document) => new SystemMessage(`This is a found document: ${doc.text}`)) || []),
+    ...(results?.map(({ score, doc }) => new SystemMessage(`This is a found document with score=${score} doc=${doc.text}`)) || []),
     new HumanMessage(`Answer the given query using specific references from the given found documents.`)
   ];
   const stream = await model.stream(messages)

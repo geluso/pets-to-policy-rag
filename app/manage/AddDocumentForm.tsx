@@ -1,15 +1,14 @@
 "use client"
 
-import { Document } from "@prisma/client"
-import { createDocument, getAllDocs } from "./actions"
 import { useEffect, useState } from "react"
 
 export default function AddDocumentForm() {
   const [allDocs, setAllDocs] = useState<Document[]>([])
   const addDoc = (doc: Document) => setAllDocs([doc, ...allDocs])
+  console.log(addDoc)
 
   useEffect(() => {
-    getAllDocs().then(setAllDocs)
+    // getAllDocs().then(setAllDocs)
   }, [])
 
   const handleSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
@@ -22,7 +21,7 @@ export default function AddDocumentForm() {
     const url = form.url.value
     const title = form.title.value
     const text = form.text.value
-    createDocument({ url, title, text }).then(addDoc)
+    console.log(url, title, text)
   }
 
   return <div>

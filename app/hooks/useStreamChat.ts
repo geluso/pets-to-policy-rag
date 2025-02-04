@@ -1,12 +1,12 @@
-import { Document } from '@prisma/client'
 import { useState, useCallback } from 'react'
+import { SearchResult } from '../rag_server/api'
 
 export function useStreamChat() {
     const [response, setResponse] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [isStreaming, setIsStreaming] = useState(false)
 
-    const startStreaming = useCallback(async (query: string, docs: Document[]) => {
+    const startStreaming = useCallback(async (query: string, results: SearchResult[]) => {
         console.log('startStreaming')
         setResponse('')
         setIsLoading(true)
@@ -15,7 +15,7 @@ export function useStreamChat() {
         const response = await fetch('/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query, docs }),
+            body: JSON.stringify({ query, results }),
         })
 
         if (!response.body) {

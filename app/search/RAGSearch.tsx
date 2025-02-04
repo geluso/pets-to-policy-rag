@@ -5,8 +5,8 @@
 
 import { useSearchParams } from "next/navigation"
 import { useState } from "react"
-import { similaritySearch } from "./actions"
-import { useStreamChat } from "../chat/useStreamChat"
+import { useStreamChat } from "../hooks/useStreamChat"
+import { search } from "../rag_server/api"
 
 export default function RagSearch() {
   const searchParams = useSearchParams()
@@ -16,10 +16,9 @@ export default function RagSearch() {
 
   const handleSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault()
-    const docs = await similaritySearch(q)
-    setResults(docs)
-    console.log('search results:', docs)
-    startStreaming(q, docs)
+    const results = await search(q)
+    console.log('search results:', results)
+    startStreaming(q, results)
   }
   
   return <div>
