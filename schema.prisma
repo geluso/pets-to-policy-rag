@@ -9,3 +9,10 @@ datasource db {
   url = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
+
+model prompt_configuration {
+  id String @id
+  system_message String   
+  document_message String
+  human_message String   
+}

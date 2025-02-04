@@ -17,10 +17,11 @@ export async function POST(req: NextRequest) {
   console.log('/api/chat', { query, results })
 
   const messages = [
-    new SystemMessage(`This is the user query = ${query ?? "No query provided"}`),
-    ...(results?.map(({ score, doc }) => new SystemMessage(`This is a found document with score=${score} doc=${doc.text}`)) || []),
+    new SystemMessage(`This is the user query = ${query}`),
+    ...(results?.map(({ score, doc: { text } }) => new SystemMessage(`This is a found document with score=${score} text=${text}`))),
     new HumanMessage(`Answer the given query using specific references from the given found documents.`)
   ];
+
   const stream = await model.stream(messages)
   const reader = stream.getReader();
   const encoder = new TextEncoder();
