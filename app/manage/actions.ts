@@ -1,32 +1,19 @@
 "use server"
 
 import prisma from "@/lib/prisma";
-import { OpenAIEmbeddings } from '@langchain/openai'
-import { NeonPostgres } from "@langchain/community/vectorstores/neon";
-
-const embeddings = new OpenAIEmbeddings({
-  apiKey: process.env.OPENAI_API_KEY,
-})
-
-const vectorStore = await NeonPostgres.initialize(embeddings, {
-  connectionString: process.env.DATABASE_URL as string,
-});
 
 export async function createDocument({url, title, text}: { url: string, title: string, text: string }) {
-  // 1. Create the document as a row in SQL
-  // 2. Obtain the document SQL row ID
-  // 3. Prepare the document for embedding
-  // 4. Create the embedding with the SQL row ID in metadata
-  const doc = await prisma.document.create({ data: { url, title, text }})
-  const docId = doc.id
+  const vector = await fetch('https://4cb3-2601-602-8b82-92b0-64d0-4b7b-a51a-85fb.ngrok-free.app/embed/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ text })
+  }).then(res => res.json())
 
-  const docsToEmbed = [
-    { pageContent: text, metadata: { documentId: docId } },
-  ];
-  const vectorIds = await vectorStore.addDocuments(docsToEmbed);
-  if (vectorIds.length !== 1) {
-    console.warn('CreateDocument error expected 1 item created got', vectorIds.length)
-  }
+  console.log('vector:', vector)
+
+  const doc = await prisma.document.create({ data: { url, title, text, embedding: vector.embedding }})
   return doc
 }
 
