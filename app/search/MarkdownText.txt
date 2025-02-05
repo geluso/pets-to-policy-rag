@@ -1,0 +1,59 @@
+.markdownReset {
+  font-family: 'Mulish', sans-serif;
+  /* Text elements */
+  h1, h2, h3, h4, h5, h6, p, blockquote, pre, code {
+    margin: revert;
+    padding: revert;
+  }
+
+  p {
+    margin: 0;
+  }
+
+
+  /* Lists */
+  ul, ol {
+    list-style: revert;
+    margin: revert;
+    padding: revert;
+    padding-left: 40px; /* Adjust based on your preference */
+  }
+
+  li {
+    margin: revert;
+    padding: revert;
+    list-style-type: disc; /* For UL */
+  }
+
+  ol li {
+    list-style-type: decimal; /* For OL */
+  }
+
+  /* Links */
+  a {
+    color: revert;
+    text-decoration: revert;
+  }
+
+  /* Images */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Tables */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 8px;
+  }
+
+  pre {
+    padding: 15px;
+    overflow: auto;
+  }
+}
