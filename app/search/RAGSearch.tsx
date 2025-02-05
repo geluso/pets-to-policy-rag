@@ -8,6 +8,29 @@ import { useState } from "react"
 import { useStreamChat } from "../hooks/useStreamChat"
 import { search } from "../rag_server/api"
 
+import { marked } from "marked";
+
+import classes from './MarkdownText.module.css'
+
+interface Props {
+    text: string
+}
+
+export const safelyCreateMarkdown = (text: string) => {
+    const markdown = marked(text) as string;
+    const __html = markdown
+    return { __html };
+};
+
+export function MarkdownText({text}: Props) {
+    return (
+        <div
+            className={`${classes.markdownReset}`}
+            dangerouslySetInnerHTML={safelyCreateMarkdown(text)}
+        />
+    )
+}
+
 export default function RagSearch() {
   const searchParams = useSearchParams()
   const [q, setQ ] = useState(searchParams.get('q') ?? '')
@@ -32,7 +55,7 @@ export default function RagSearch() {
 
     <h2>Answer</h2>
     {isLoading && <p>Loading...</p>}
-    <p>{response}</p>
+    <MarkdownText text={response} />
 
     <h2>Sources</h2>
     {results.map((doc: any) => {
