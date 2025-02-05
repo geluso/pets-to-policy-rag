@@ -15,7 +15,7 @@ const model = new ChatOpenAI({
 async function formatInput(query: string, results: SearchResult[], prompt: prompt_configuration) {
   const systemMessage = (prompt?.system_message || '').replace('$query', query)
   const humanMessage = prompt?.human_message || ''
-  const documentMessages = results.map(({ score, doc: { text } }) => (prompt?.document_message || '').replace('$score', '' + score).replace('$text', text))
+  const documentMessages = results.map(({ score, doc: { text } }) => (prompt?.document_message || '').replace('$score', '' + score).replace('$text', text.split(' ').slice(0, 500)))
   console.log(systemMessage, humanMessage, documentMessages)
   return { systemMessage, humanMessage, documentMessages }
 }
