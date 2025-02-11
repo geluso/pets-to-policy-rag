@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react'
-import { SearchResult } from '../rag_server/api'
 
 export function useStreamChat() {
     const [response, setResponse] = useState('')
