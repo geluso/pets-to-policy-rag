@@ -27,6 +27,5 @@ export type SearchResult = {
 }
 
 export async function search(query: string): Promise<SearchResult[]> {
-    console.log(query)
     return fetch(URL_SEARCH + "?q=" + query).then(res => res.json())
 }

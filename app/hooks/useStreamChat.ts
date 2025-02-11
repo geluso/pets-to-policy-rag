@@ -6,7 +6,7 @@ export function useStreamChat() {
     const [isLoading, setIsLoading] = useState(false)
     const [isStreaming, setIsStreaming] = useState(false)
 
-    const startStreaming = useCallback(async (query: string, results: SearchResult[]) => {
+    const startStreaming = useCallback(async (query: string) => {
         console.log('startStreaming')
         setResponse('')
         setIsLoading(true)
@@ -15,7 +15,7 @@ export function useStreamChat() {
         const response = await fetch('/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query, results }),
+            body: JSON.stringify({ query }),
         })
 
         if (!response.body) {

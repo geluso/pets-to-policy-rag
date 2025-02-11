@@ -3,7 +3,7 @@
 import { NextRequest } from 'next/server'
 import { ChatOpenAI } from '@langchain/openai'
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { SearchResult } from '@/app/rag_server/api';
+import { search, SearchResult } from '@/app/rag_server/api';
 import prisma from '@/lib/prisma';
 import { prompt_configuration } from '@prisma/client';
 
@@ -11,6 +11,24 @@ const model = new ChatOpenAI({
     openAIApiKey: process.env.OPENAI_API_KEY,
     streaming: true, // Enable streaming in LangChain
 })
+
+async function preprocessQuery(query: string): Promise<string> {
+  const preprocessingModel = new ChatOpenAI({
+      openAIApiKey: process.env.OPENAI_API_KEY,
+      temperature: 0.3,  // Keep responses factual
+      modelName: "gpt-3.5-turbo"  // Use gpt-3.5-turbo for lower cost
+  });
+
+  const prompt = `You are a legal AI assistant improving user search queries for a legal document retrieval system. 
+  Given the following user query, expand it into a well-formed legal search query while maintaining its intent.
+
+  User Query: "${query}"
+
+  Expanded Legal Query:`;
+
+  const response = await preprocessingModel.invoke([new HumanMessage(prompt)]);
+  return response.content.toString().trim();
+}
 
 async function formatInput(query: string, results: SearchResult[], prompt: prompt_configuration) {
   const systemMessage = (prompt?.system_message || '').replace('$query', query)
@@ -31,12 +49,16 @@ function createInput(systemMessage: string, documentMessages: string[], humanMes
 
 export async function POST(req: NextRequest) {
   const json = await req.json()
-  const query = json.query
-  const results = json.results as SearchResult[]
-  console.log('/api/chat', { query, results })
+  const initialQuery = json.query
+
+  const embeddedQuery = await preprocessQuery(initialQuery)
+  console.log('/api/chat', { initialQuery, embeddedQuery })
+
+  const results = await search(embeddedQuery)
+  console.log('search results:', results)
 
   const prompt = await prisma.prompt_configuration.findFirst() as prompt_configuration
-  const { systemMessage, humanMessage, documentMessages } = await formatInput(query, results, prompt)
+  const { systemMessage, humanMessage, documentMessages } = await formatInput(initialQuery, results, prompt)
   const input = createInput(systemMessage, documentMessages, humanMessage)
 
   const stream = await model.stream(input)

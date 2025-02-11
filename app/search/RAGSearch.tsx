@@ -39,9 +39,7 @@ export default function RagSearch() {
 
   const handleSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault()
-    const results = await search(q)
-    console.log('search results:', results)
-    startStreaming(q, results)
+    startStreaming(q)
   }
   
   return <div>
