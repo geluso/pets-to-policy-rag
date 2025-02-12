@@ -34,7 +34,6 @@ export function MarkdownText({text}: Props) {
 export default function RagSearch() {
   const searchParams = useSearchParams()
   const [q, setQ ] = useState(searchParams.get('q') ?? '')
-  const [results, setResults] = useState<any>([])
   const { response, isLoading, isStreaming, startStreaming } = useStreamChat()
 
   const handleSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
@@ -54,18 +53,5 @@ export default function RagSearch() {
     <h2>Answer</h2>
     {isLoading && <p>Loading...</p>}
     <MarkdownText text={response} />
-
-    <h2>Sources</h2>
-    {results.map((doc: any) => {
-      return <div key={doc.id}>
-        <div className="border border-solid border-black mb-2 p-2">
-          <h3>{doc.title}</h3>
-          <p>{doc.text}</p>
-          <p>
-            <a href={doc.url}>{doc.url}</a>
-          </p>
-        </div>
-      </div>
-    })}
   </div>
 }
