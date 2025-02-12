@@ -23,13 +23,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="w-full h-full m-0 p-0">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col w-full h-full m-0 p-0`}
       >
-        <nav>
-          <a href="/">Search</a>{' '}
-        </nav>
         {children}
       </body>
     </html>
