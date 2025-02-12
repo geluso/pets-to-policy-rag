@@ -28,10 +28,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <nav>
-          <a href="/search">Search</a>{' '}
-          <a href="/manage">Manage Documents</a>{' '}
-          {/* <a href="/chat">Chat</a>{' '}
-          <a href="/embeddings">Embeddings</a> */}
+          <a href="/">Search</a>{' '}
         </nav>
         {children}
       </body>

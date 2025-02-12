@@ -5,12 +5,10 @@
 
 import { useSearchParams } from "next/navigation"
 import { useState } from "react"
-import { useStreamChat } from "../hooks/useStreamChat"
-import { search } from "../rag_server/api"
+import { useStreamChat } from "./useStreamChat"
+import { search } from "../../rag_server/api"
 
 import { marked } from "marked";
-
-import classes from './MarkdownText.module.css'
 
 interface Props {
     text: string
@@ -22,16 +20,7 @@ export const safelyCreateMarkdown = (text: string) => {
     return { __html };
 };
 
-export function MarkdownText({text}: Props) {
-    return (
-        <div
-            className={`${classes.markdownReset}`}
-            dangerouslySetInnerHTML={safelyCreateMarkdown(text)}
-        />
-    )
-}
-
-export default function RagSearch() {
+export default function Search() {
   const searchParams = useSearchParams()
   const [q, setQ ] = useState(searchParams.get('q') ?? '')
   const { response, isLoading, isStreaming, startStreaming } = useStreamChat()
@@ -52,6 +41,6 @@ export default function RagSearch() {
 
     <h2>Answer</h2>
     {isLoading && <p>Loading...</p>}
-    <MarkdownText text={response} />
+    <div>{response}</div>
   </div>
 }

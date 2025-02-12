@@ -1,10 +1,10 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { setPromptConfiguration } from "./actions"
-import { usePromptConfiguration } from "../hooks/usePromptConfiguration"
+import { setPromptConfiguration } from "../../admin/actions"
+import { usePromptConfiguration } from "./usePromptConfiguration"
 
-export default function AdminPage() {
+export default function Admin() {
     const { isLoading: isLoadingPromptConfiguration, config } = usePromptConfiguration()
     const [systemMessage, setSystemMessage] = useState('')
     const [documentMessage, setDocumentMessage] = useState('')

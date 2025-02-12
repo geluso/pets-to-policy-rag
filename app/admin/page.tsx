@@ -1,7 +1,7 @@
 "use server"
 
-import AdminForm from "./AdminForm";
+import Admin from "../components/admin/Admin";
 
 export default async function AdminPage() {
-    return <AdminForm />
+    return <Admin />
 }
