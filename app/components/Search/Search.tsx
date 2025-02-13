@@ -3,20 +3,20 @@
 
 "use client"
 
-import { search } from "../../rag_server/api"
-
 import Paragraphs from "./Paragraphs/Paragraphs"
-import Sources from "./Sources/Sources"
 import SearchInput from "./SearchInput/SearchInput"
 import { useSearch } from "./useSearch"
-import { paragraphs, sources } from "./_mock"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Suggestions from "./Suggestions/Suggestions"
+import SourceDocuments from "./SourceDocuments/SourceDocuments"
 
 export default function Search() {
   const [isInitialLoad, setIsInitialLoad] = useState(true)
-  const isSearching = false // remove this
-  // const { search, isSearching, sources, paragraphs } = useSearch()
+  const { search, isSearching, sourceDocuments, paragraphs } = useSearch()
+
+  useEffect(() => {
+    (paragraphs || sourceDocuments) && setIsInitialLoad(false)
+  }, [paragraphs, sourceDocuments])
 
   const handleSubmit = (inputValue: string) => {
     search(inputValue)
@@ -29,7 +29,7 @@ export default function Search() {
         <Suggestions />
       ) : (
         <div className="flex w-full h-full">
-          <Sources sources={sources} isSearching={isSearching} />
+          <SourceDocuments sourceDocuments={sourceDocuments} isSearching={isSearching} />
           <Paragraphs paragraphs={paragraphs} isSearching={isSearching} />
         </div>
       )}

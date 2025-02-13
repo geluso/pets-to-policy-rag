@@ -5,8 +5,13 @@ export interface Span {
 
 export type Paragraph = Span[]
 
-export interface Source {
+export interface SourceDocument {
     title: string
     url: string
     text: string
+}
+
+export type SearchResult = {
+    score: number,
+    doc: SourceDocument
 }

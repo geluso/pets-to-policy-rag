@@ -1,26 +1,32 @@
+import { getSearchResults } from '@/app/rag_server/api'
+import { Paragraph, SourceDocument } from '@/app/types'
 import { useState, useCallback } from 'react'
 
 export function useSearch(): {
-    paragraphs: string
+    sourceDocuments: SourceDocument[]
+    paragraphs: Paragraph[]
     isSearching: boolean
-    isStreaming: boolean
     search: (query: string) => Promise<void>
 } {
-    const [paragraphs, setParagraphs] = useState('')
+    const [sourceDocuments, setSourceDocuments] = useState<SourceDocument[]>([])
+    const [paragraphs, setParagraphs] = useState<Paragraph[]>([])
     const [isSearching, setIsSearching] = useState(false)
-    const [isStreaming, setIsStreaming] = useState(false)
 
     const search = useCallback(async (query: string) => {
-        console.log('startStreaming')
-        setParagraphs('')
+        console.log('use callback', paragraphs)
         setIsSearching(true)
 
-        console.log('startStreaming fetch')
+        const searchResults = await getSearchResults(query)
+        console.log('/api/chat', { query, searchResults })
+
         const response = await fetch('/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query }),
+            body: JSON.stringify({ query, searchResults }),
         })
+
+        const sourceDocuments = searchResults.map(searchResult => searchResult.doc)
+        setSourceDocuments(sourceDocuments)
 
         if (!response.body) {
             setIsSearching(false)
@@ -31,7 +37,7 @@ export function useSearch(): {
         const reader = response.body.getReader()
         const decoder = new TextDecoder()
 
-        setIsStreaming(true)
+        // TODO: make sure the while loop exits when the component unmounts
         while (true) {
             const { done, value } = await reader.read()
             if (done) break
@@ -39,12 +45,12 @@ export function useSearch(): {
             const chunk = decoder.decode(value, { stream: true })
             console.log({ chunk })
             console.log({ chunkToString: chunk.toString() })
-            setParagraphs((prev) => prev + chunk) // Auto-re-render
+            const paragraph = [{ isImportant: false, text: chunk }]
+            console.log({paragraphs})
+            setParagraphs([...paragraphs, paragraph])
         }
-
-        setIsStreaming(false)
         setIsSearching(false)
-    }, [])
+    }, [sourceDocuments, paragraphs])
 
-    return { paragraphs, isSearching, isStreaming, search }
+    return { sourceDocuments, paragraphs, isSearching, search }
 }
