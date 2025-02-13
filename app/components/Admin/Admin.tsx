@@ -64,7 +64,7 @@ export default function Admin() {
                 </div>
 
                 <div>
-                    <input type="submit" value="Save" />
+                    <input className="w-full" type="submit" value="Save" />
                 </div>
             </form>
         </div>

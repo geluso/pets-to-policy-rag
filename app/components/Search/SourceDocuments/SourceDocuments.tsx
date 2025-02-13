@@ -6,7 +6,6 @@ interface Props {
 }
 
 export default function SourceDocuments({sourceDocuments, isSearching}: Props) {
-  console.log({isSearching})
   return (
     <div className="flex flex-col gap-1">
       {sourceDocuments.map((sourceDocument, index) => (

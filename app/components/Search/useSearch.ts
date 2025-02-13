@@ -51,12 +51,9 @@ export function useSearch(): {
         while (isMounted.current) {
             const { done, value } = await reader.read()
             if (done) break
-            console.log('startStreaming read value', value)
             const chunk = decoder.decode(value, { stream: true })
             console.log({ chunk })
-            console.log({ chunkToString: chunk.toString() })
-            const nextParagraph = [{ isImportant: false, text: chunk }]
-            console.log({paragraphs})
+            const nextParagraph = [{ isImportant: Math.random() < .5, text: chunk }]
             setParagraphs(prevParagraphs => [...prevParagraphs, nextParagraph])
         }
         setIsSearching(false)
