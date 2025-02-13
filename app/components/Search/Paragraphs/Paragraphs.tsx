@@ -9,13 +9,13 @@ export default function Paragraphs({paragraphs, isSearching}: Props) {
     return (
         <div className="w-full h-full border-1 flex-col gap-1">
             {paragraphs.map((paragraph, index) => (
-                <div key={`paragraph-${index}`}>
+                <span key={`paragraph-${index}`}>
                     {paragraph.map(({isImportant, text}, index) => (
                         <span key={`text-${index}`} className={`${isImportant ? 'text-red-500' : 'text-black'}`}>
                             {text}
                         </span>
                     ))}
-                </div>
+                </span>
             ))}
         </div>
     )

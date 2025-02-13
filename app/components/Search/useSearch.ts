@@ -24,6 +24,7 @@ export function useSearch(): {
         if (!isMounted.current) return
 
         console.log('use callback', paragraphs)
+        setParagraphs([])
         setIsSearching(true)
 
         const searchResults = await getSearchResults(query)
