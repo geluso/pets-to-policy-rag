@@ -1,6 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-/* eslint-disable  @typescript-eslint/no-unused-vars */
-
 "use client"
 
 import Paragraphs from "./Paragraphs/Paragraphs"
@@ -15,7 +12,7 @@ export default function Search() {
   const { search, isSearching, sourceDocuments, paragraphs } = useSearch()
 
   useEffect(() => {
-    (paragraphs || sourceDocuments) && setIsInitialLoad(false)
+    if (paragraphs || sourceDocuments) setIsInitialLoad(false)
   }, [paragraphs, sourceDocuments])
 
   const handleSubmit = (inputValue: string) => {
@@ -29,8 +26,8 @@ export default function Search() {
         <Suggestions />
       ) : (
         <div className="flex w-full h-full">
-          <SourceDocuments sourceDocuments={sourceDocuments} isSearching={isSearching} />
-          <Paragraphs paragraphs={paragraphs} isSearching={isSearching} />
+          <SourceDocuments sourceDocuments={sourceDocuments} />
+          <Paragraphs paragraphs={paragraphs} />
         </div>
       )}
     </div>

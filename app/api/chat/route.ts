@@ -2,9 +2,6 @@
 
 import { NextRequest } from 'next/server'
 import { ChatOpenAI } from '@langchain/openai'
-import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import prisma from '@/lib/prisma';
-import { prompt_configuration } from '@prisma/client';
 import { SearchResult } from '@/app/types';
 import { preparePrompt } from './preparePrompt';
 

@@ -5,6 +5,7 @@ export default function useSuggestions(): string[] | null {
 
     useEffect(() => {
         // fetch suggestions from vercel SQL DB
+        setSuggestions(null)
     }, [])
 
     return suggestions

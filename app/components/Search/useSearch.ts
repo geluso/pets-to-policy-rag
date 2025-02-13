@@ -22,8 +22,6 @@ export function useSearch(): {
 
     const search = useCallback(async (query: string) => {
         if (!isMounted.current) return
-
-        console.log('use callback', paragraphs)
         setParagraphs([])
         setIsSearching(true)
 
@@ -61,7 +59,7 @@ export function useSearch(): {
         if (isMounted.current) {
             setIsSearching(false)
         }
-    }, [sourceDocuments])
+    }, [])
 
     return { sourceDocuments, paragraphs, isSearching, search }
 }

@@ -2,10 +2,9 @@ import { Paragraph } from "@/app/types"
 
 interface Props {
     paragraphs: Paragraph[]
-    isSearching: boolean
 }
 
-export default function Paragraphs({paragraphs, isSearching}: Props) {
+export default function Paragraphs({paragraphs}: Props) {
     return (
         <div className="w-full h-full border-1 flex-col gap-1">
             {paragraphs.map((paragraph, index) => (
