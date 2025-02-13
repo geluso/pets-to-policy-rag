@@ -1,4 +1,4 @@
-import { getSearchResults } from '@/app/rag_server/api'
+import { getSearchResults } from '@/app/lib/rag_server/api'
 import { Paragraph, SourceDocument } from '@/app/types'
 import { useState, useCallback, useRef, useEffect } from 'react'
 

@@ -1,6 +1,5 @@
-import { SearchResult } from "@/app/types"
 import prisma from "@/lib/prisma"
-import { BaseMessage, HumanMessage, SystemMessage } from "@langchain/core/messages"
+import { Message, SearchResult } from "@/app/types"
 import { prompt_configuration } from "@prisma/client"
 
 async function formatInput(query: string, sourceDocuments: SearchResult[], prompt: prompt_configuration) {
@@ -10,16 +9,16 @@ async function formatInput(query: string, sourceDocuments: SearchResult[], promp
   return { systemMessage, humanMessage, sourceDocumentMessages }
 }
 
-function createInput(systemMessage: string, sourceDocumentMessages: string[], humanMessage: string) {
-  const input = [
-    new SystemMessage(systemMessage),
-    ...sourceDocumentMessages.map(sourceDocumentMessage => new SystemMessage(sourceDocumentMessage)),
-    new HumanMessage(humanMessage)
+function createInput(systemMessage: string, sourceDocumentMessages: string[], humanMessage: string): Message[] {
+  const input: Message[] = [
+    { role: "system", content: systemMessage },
+    ...sourceDocumentMessages.map(sourceDocumentMessage => ({ role: "system", content: sourceDocumentMessage })),
+    { role: "user", content: humanMessage }
   ];
   return input
 }
 
-export async function preparePrompt(query: string, sourceDocuments: SearchResult[]): Promise<(BaseMessage)[]> {
+export async function preparePrompt(query: string, sourceDocuments: SearchResult[]): Promise<Message[]> {
   const promptConfig = await prisma.prompt_configuration.findFirst() as prompt_configuration
   const { systemMessage, humanMessage, sourceDocumentMessages } = await formatInput(query, sourceDocuments, promptConfig)
   const input = createInput(systemMessage, sourceDocumentMessages, humanMessage)

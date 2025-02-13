@@ -1,14 +1,29 @@
 'use server'
 
 import { NextRequest } from 'next/server'
-import { ChatOpenAI } from '@langchain/openai'
 import { SearchResult } from '@/app/types';
 import { preparePrompt } from './preparePrompt';
 
-const model = new ChatOpenAI({
-    openAIApiKey: process.env.OPENAI_API_KEY,
-    streaming: true, // Enable streaming in LangChain
-})
+import OpenAI from "openai";
+import { zodResponseFormat } from "openai/helpers/zod";
+import { z } from "zod";
+import { ChatCompletionMessageParam } from 'openai/resources/chat/completions.mjs';
+
+const openai = new OpenAI();
+
+const ParagraphsSchema = z.object({
+  // a: all paragraphs
+  // i: is the paragraph important
+  // t: paragraph text
+  a: z.array(
+    z.array(
+      z.object({
+        i: z.boolean(),
+        t: z.string()      
+      })
+    )
+  )}
+)
 
 // This is the POST /api/chat/ endpoint
 // It returns a streaming response
@@ -17,22 +32,29 @@ export async function POST(req: NextRequest) {
   const query: string = json.query
   const searchResults: SearchResult[] = json.searchResults
 
-  const preparedPrompt = await preparePrompt(query, searchResults)
-  const stream = await model.stream(preparedPrompt)
-  const reader = stream.getReader();
+  const preparedPrompt = await preparePrompt(query, searchResults) as ChatCompletionMessageParam[]
   const encoder = new TextEncoder();
-
   const readableStream = new ReadableStream({
     async start(controller) {
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        
-        // Convert AIMessageChunk to a string before streaming
-        const textChunk = value.content.toString(); 
-        controller.enqueue(encoder.encode(textChunk));
-      }
-      controller.close();
+      const stream = openai.beta.chat.completions
+      .stream({
+        model: "gpt-4o",
+        messages: preparedPrompt,
+        response_format: zodResponseFormat(ParagraphsSchema, "entities"),
+      })
+      .on("refusal.done", () => console.log("request refused"))
+      .on("content.delta", ({ snapshot, parsed, delta }) => {
+        console.log("delta:", delta);
+        console.log("content:", snapshot);
+        console.log("parsed:", parsed);
+        console.log();
+        controller.enqueue(encoder.encode(snapshot));
+      })
+      .on("content.done", (props) => {
+        console.log(props);
+        controller.close();
+      });
+      await stream.done();
     }
   });
 
