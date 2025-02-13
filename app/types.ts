@@ -5,3 +5,8 @@ export interface Span {
 
 export type Paragraph = Span[]
 
+export interface Source {
+    title: string
+    url: string
+    text: string
+}

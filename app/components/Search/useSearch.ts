@@ -1,14 +1,19 @@
 import { useState, useCallback } from 'react'
 
-export function useStreamChat() {
-    const [response, setResponse] = useState('')
-    const [isLoading, setIsLoading] = useState(false)
+export function useSearch(): {
+    paragraphs: string
+    isSearching: boolean
+    isStreaming: boolean
+    search: (query: string) => Promise<void>
+} {
+    const [paragraphs, setParagraphs] = useState('')
+    const [isSearching, setIsSearching] = useState(false)
     const [isStreaming, setIsStreaming] = useState(false)
 
-    const startStreaming = useCallback(async (query: string) => {
+    const search = useCallback(async (query: string) => {
         console.log('startStreaming')
-        setResponse('')
-        setIsLoading(true)
+        setParagraphs('')
+        setIsSearching(true)
 
         console.log('startStreaming fetch')
         const response = await fetch('/api/chat', {
@@ -18,7 +23,7 @@ export function useStreamChat() {
         })
 
         if (!response.body) {
-            setIsLoading(false)
+            setIsSearching(false)
             throw new Error('No response body found')
         }
 
@@ -34,12 +39,12 @@ export function useStreamChat() {
             const chunk = decoder.decode(value, { stream: true })
             console.log({ chunk })
             console.log({ chunkToString: chunk.toString() })
-            setResponse((prev) => prev + chunk) // Auto-re-render
+            setParagraphs((prev) => prev + chunk) // Auto-re-render
         }
 
         setIsStreaming(false)
-        setIsLoading(false)
+        setIsSearching(false)
     }, [])
 
-    return { response, isLoading, isStreaming, startStreaming }
+    return { paragraphs, isSearching, isStreaming, search }
 }
