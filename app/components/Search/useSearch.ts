@@ -45,12 +45,12 @@ export function useSearch(): {
             const chunk = decoder.decode(value, { stream: true })
             console.log({ chunk })
             console.log({ chunkToString: chunk.toString() })
-            const paragraph = [{ isImportant: false, text: chunk }]
+            const nextParagraph = [{ isImportant: false, text: chunk }]
             console.log({paragraphs})
-            setParagraphs([...paragraphs, paragraph])
+            setParagraphs(prevParagraphs => [...prevParagraphs, nextParagraph])
         }
         setIsSearching(false)
-    }, [sourceDocuments, paragraphs])
+    }, [sourceDocuments])
 
     return { sourceDocuments, paragraphs, isSearching, search }
 }
