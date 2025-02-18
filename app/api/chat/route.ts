@@ -45,13 +45,10 @@ export async function POST(req: NextRequest) {
       .on("refusal.done", () => console.log("request refused"))
       .on("content.delta", ({ snapshot, parsed, delta }) => {
         console.log("delta:", delta);
-        console.log("content:", snapshot);
-        console.log("parsed:", parsed);
-        console.log();
-        controller.enqueue(encoder.encode(snapshot));
+        controller.enqueue(encoder.encode(delta));
       })
       .on("content.done", (props) => {
-        console.log(props);
+        console.log("done");
         controller.close();
       });
       await stream.done();
