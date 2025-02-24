@@ -12,7 +12,6 @@ export function useSearch(): {
     const [sourceDocuments, setSourceDocuments] = useState<SourceDocument[]>([])
     const [paragraphs, setParagraphs] = useState<Paragraph[]>([])
     const [isSearching, setIsSearching] = useState(false)
-    const [streamedString, setStreamedString] = useState('')
     const isMounted = useRef(true)
 
     useEffect(() => {
@@ -49,14 +48,27 @@ export function useSearch(): {
         const decoder = new TextDecoder()
 
         let buffer = ''
+
+
+
+        console.log('mounted')
+
         while (isMounted.current) {
             const { done, value } = await reader.read()
             if (done) break
+            
             const delta = decoder.decode(value, { stream: true })
+
             buffer += delta
-            setStreamedString((prev) => prev + delta)
-            const json = parsePartialJsonString(buffer)
-            console.log({ delta, buffer, json })
+            const parsedJSONParagraphs = parsePartialJsonString(buffer)
+
+            // console.log(parsedJSONParagraphs)
+
+            if (parsedJSONParagraphs.length > 0) {
+
+                setParagraphs(parsedJSONParagraphs)
+            }
+            // console.log({ delta, buffer, json: parsedJSONParagraphs })
             // const nextParagraph = [{ isImportant: Math.random() < .5, text: delta }]
             // setParagraphs(prevParagraphs => [...prevParagraphs, nextParagraph])
         }

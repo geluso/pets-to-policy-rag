@@ -1,43 +1,95 @@
-import { Paragraph } from "@/app/types"
+import { Paragraph } from "@/app/types";
 
-export function parsePartialJsonString(input: string): Paragraph[] {
-  const paragraphs: Paragraph[] = []
-  let currentParagraph: Paragraph = []
-  let buffer = ''
-  let isInsideString = false
+export function parsePartialJsonString(streamedJson: string): Paragraph[] {
+    let buffer = "";
+    let stack: string[] = [];
+    let insideString = false;
+    let escape = false;
 
-  for (let i = 0; i < input.length; i++) {
-      const char = input[i]
+    let lastCompletedIndex = 0;
 
-      if (char === '"') {
-          isInsideString = !isInsideString
-      }
 
-      if (!isInsideString && (char === '{' || char === '}' || char === ',' || char === ':')) {
-          if (buffer.trim()) {
-              currentParagraph.push({ isImportant: false, text: buffer.trim() })
-          }
-          currentParagraph.push({ isImportant: true, text: char })
-          buffer = ''
-      } else if (char === '\n') {
-          if (buffer.trim()) {
-              currentParagraph.push({ isImportant: false, text: buffer.trim() })
-          }
-          paragraphs.push(currentParagraph)
-          currentParagraph = []
-          buffer = ''
-      } else {
-          buffer += char
-      }
-  }
+    console.log(streamedJson)
 
-  if (buffer.trim()) {
-      currentParagraph.push({ isImportant: false, text: buffer.trim() })
-  }
+    for (let i = 0; i < streamedJson.length; i++) {
+        let char = streamedJson[i];
+        buffer += char;
 
-  if (currentParagraph.length > 0) {
-      paragraphs.push(currentParagraph)
-  }
+        if (char === '"' && !escape) {
+            insideString = !insideString;
+        }
 
-  return paragraphs
+        if (!insideString) {
+            if (char === '{' || char === '[') {
+                stack.push(char);
+            } else if (char === '}' || char === ']') {
+                if (stack.length) {
+                    let last = stack[stack.length - 1];
+                    if ((char === '}' && last === '{') || (char === ']' && last === '[')) {
+                        stack.pop();
+                    }
+                }
+            }
+        }
+
+        escape = char === '\\' ? !escape : false;
+
+        // Try parsing as soon as we have a new word (space or punctuation)
+        if (!insideString && (char === ' ' || char === '.' || char === ',' || char === '!' || char === '?')) {
+            try {
+                let parsed = JSON.parse(buffer);
+                if (parsed && typeof parsed === 'object' && Array.isArray(parsed.a)) {
+                    lastCompletedIndex = i + 1; // Mark progress
+                }
+            } catch {
+                continue; // JSON still incomplete
+            }
+        }
+    }
+
+    // Trim buffer to last successfully parsed point
+    buffer = buffer.substring(0, lastCompletedIndex);
+
+    // Ensure it's a valid JSON object, applying fixes if necessary
+    if (!buffer.startsWith('{')) {
+        buffer = '{"a":[]}';
+    }
+
+    if (!buffer.includes('"a":')) {
+        buffer = buffer.replace('{', '{"a":[],');
+    }
+
+    if (!buffer.includes('"a":[')) {
+        buffer = buffer.replace('"a":', '"a":["') + '"]';
+    }
+
+    let parsedJson: { a: { i: boolean; t: string }[][] } = JSON.parse(buffer || '{"a":[]}');
+
+    return parsedJson.a.map((paragraph) => {
+        let spans: { isImportant: boolean; text: string }[] = [];
+        let currentSpan: { isImportant: boolean; text: string } | null = null;
+
+        for (let span of paragraph) {
+            if (!currentSpan) {
+                currentSpan = { isImportant: span.i, text: span.t };
+            } else {
+                currentSpan.text += " " + span.t;
+                if (span.i) {
+                    currentSpan.isImportant = true; // Apply importance only when span is fully built
+                }
+            }
+
+            // If span ends in a punctuation or space, consider it complete
+            if (span.t.endsWith('.') || span.t.endsWith(',') || span.t.endsWith('!') || span.t.endsWith('?') || span.t.endsWith(' ')) {
+                spans.push(currentSpan);
+                currentSpan = null;
+            }
+        }
+
+        if (currentSpan) {
+            spans.push(currentSpan);
+        }
+
+        return spans;
+    });
 }

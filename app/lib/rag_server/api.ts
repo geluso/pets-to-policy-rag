@@ -3,7 +3,7 @@
 import { SearchResult } from "../../types"
 import { preprocessQuery } from "./preprocessQuery"
 
-const URL_BASE = "https://4cb3-2601-602-8b82-92b0-64d0-4b7b-a51a-85fb.ngrok-free.app"
+const URL_BASE = "http://localhost:8080"
 const URL_ADD_DOCUMENT = URL_BASE + "/add_document/"
 const URL_SEARCH = URL_BASE + "/search/"
 
