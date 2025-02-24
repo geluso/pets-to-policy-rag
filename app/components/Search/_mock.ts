@@ -1,4 +1,4 @@
-import { Paragraph, Source } from "@/app/types";
+import { Paragraph, SourceDocument } from "@/app/types";
 
 export const paragraphs: Paragraph[] = [
     [
@@ -23,7 +23,7 @@ export const paragraphs: Paragraph[] = [
     ],
 ]
 
-export const sources: Source[] = [
+export const sources: SourceDocument[] = [
     {
         title: 'Source 1',
         url: 'https://www.google.com',
