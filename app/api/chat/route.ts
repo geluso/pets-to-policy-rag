@@ -43,11 +43,17 @@ export async function POST(req: NextRequest) {
         response_format: zodResponseFormat(ParagraphsSchema, "entities"),
       })
       .on("refusal.done", () => console.log("request refused"))
-      .on("content.delta", ({ snapshot, parsed, delta }) => {
+      .on("content.delta", ({ delta }) => {
+        // { snapshot, parsed } also available here. deleted in lint.
+        // parsed always returns proper JSON from the steam so far.
+        // parsed is important as a proof of concept showing JSON can be parsed mid-stream.
+        // but, we need the JSON to be parsed mid-stream on the client, not in this route.
+        // I have not found a good library that will parse JSON via a stream.
+        // opportunity to create a library? ":0)
         console.log("delta:", delta);
         controller.enqueue(encoder.encode(delta));
       })
-      .on("content.done", (props) => {
+      .on("content.done", () => {
         console.log("done");
         controller.close();
       });

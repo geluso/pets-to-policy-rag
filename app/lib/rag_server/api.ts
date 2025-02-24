@@ -5,6 +5,8 @@ import { preprocessQuery } from "./preprocessQuery"
 
 const LOCAL_URL_BASE = "http://localhost:8080"
 const NGROK_URL_BASE = "https://4cb3-2601-602-8b82-92b0-64d0-4b7b-a51a-85fb.ngrok-free.app"
+// Lame way to appease "unused variable" lint
+console.log({ LOCAL_URL_BASE, NGROK_URL_BASE })
 const URL_BASE = NGROK_URL_BASE
 const URL_ADD_DOCUMENT = URL_BASE + "/add_document/"
 const URL_SEARCH = URL_BASE + "/search/"

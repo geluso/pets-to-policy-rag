@@ -1,18 +1,17 @@
 import { Paragraph } from "@/app/types";
 
 export function parsePartialJsonString(streamedJson: string): Paragraph[] {
+    const stack: string[] = [];
+
     let buffer = "";
-    let stack: string[] = [];
     let insideString = false;
     let escape = false;
-
     let lastCompletedIndex = 0;
-
 
     console.log(streamedJson)
 
     for (let i = 0; i < streamedJson.length; i++) {
-        let char = streamedJson[i];
+        const char = streamedJson[i];
         buffer += char;
 
         if (char === '"' && !escape) {
@@ -24,7 +23,7 @@ export function parsePartialJsonString(streamedJson: string): Paragraph[] {
                 stack.push(char);
             } else if (char === '}' || char === ']') {
                 if (stack.length) {
-                    let last = stack[stack.length - 1];
+                    const last = stack[stack.length - 1];
                     if ((char === '}' && last === '{') || (char === ']' && last === '[')) {
                         stack.pop();
                     }
@@ -37,7 +36,7 @@ export function parsePartialJsonString(streamedJson: string): Paragraph[] {
         // Try parsing as soon as we have a new word (space or punctuation)
         if (!insideString && (char === ' ' || char === '.' || char === ',' || char === '!' || char === '?')) {
             try {
-                let parsed = JSON.parse(buffer);
+                const parsed = JSON.parse(buffer);
                 if (parsed && typeof parsed === 'object' && Array.isArray(parsed.a)) {
                     lastCompletedIndex = i + 1; // Mark progress
                 }
@@ -63,13 +62,13 @@ export function parsePartialJsonString(streamedJson: string): Paragraph[] {
         buffer = buffer.replace('"a":', '"a":["') + '"]';
     }
 
-    let parsedJson: { a: { i: boolean; t: string }[][] } = JSON.parse(buffer || '{"a":[]}');
+    const parsedJson: { a: { i: boolean; t: string }[][] } = JSON.parse(buffer || '{"a":[]}');
 
     return parsedJson.a.map((paragraph) => {
-        let spans: { isImportant: boolean; text: string }[] = [];
+        const spans: { isImportant: boolean; text: string }[] = [];
         let currentSpan: { isImportant: boolean; text: string } | null = null;
 
-        for (let span of paragraph) {
+        for (const span of paragraph) {
             if (!currentSpan) {
                 currentSpan = { isImportant: span.i, text: span.t };
             } else {
