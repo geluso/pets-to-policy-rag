@@ -10,6 +10,7 @@ import SourceDocuments from "./SourceDocuments/SourceDocuments"
 export default function Search() {
   const [isInitialLoad, setIsInitialLoad] = useState(true)
   const { search, isSearching, sourceDocuments, paragraphs } = useSearch()
+  console.log({sourceDocuments})
 
   useEffect(() => {
     if (paragraphs || sourceDocuments) setIsInitialLoad(false)
@@ -26,8 +27,12 @@ export default function Search() {
         <Suggestions />
       ) : (
         <div className="flex w-full h-full">
-          <SourceDocuments sourceDocuments={sourceDocuments} />
-          <Paragraphs paragraphs={paragraphs} />
+          <div className="w-1/2">
+            <SourceDocuments sourceDocuments={sourceDocuments} />
+          </div>
+          <div className="w-1/2">
+            <Paragraphs paragraphs={paragraphs} />
+          </div>
         </div>
       )}
     </div>
