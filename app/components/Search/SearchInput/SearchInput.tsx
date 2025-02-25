@@ -28,6 +28,9 @@ export default function SearchInput({handleSubmit, isSearching}: Props) {
     return (
         <div>
             <div className="pb-2 w-full">
+              <h2>Query Texas Code About Unemployment Insurance Data</h2>
+            </div>
+            <div className="pb-2 w-full">
               <input className="w-full box-border" value={inputValue} onChange={handleChange} onKeyDown={handleKeyDown} disabled={isSearching}/>
             </div>
             <div>
