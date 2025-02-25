@@ -8,7 +8,7 @@ export function parsePartialJsonString(streamedJson: string): Paragraph[] {
     let escape = false;
     let lastCompletedIndex = 0;
 
-    console.log(streamedJson)
+    console.log('stream', streamedJson)
 
     for (let i = 0; i < streamedJson.length; i++) {
         const char = streamedJson[i];
@@ -63,6 +63,7 @@ export function parsePartialJsonString(streamedJson: string): Paragraph[] {
     }
 
     const parsedJson: { a: { i: boolean; t: string }[][] } = JSON.parse(buffer || '{"a":[]}');
+    console.log({parsedJson})
 
     return parsedJson.a.map((paragraph) => {
         const spans: { isImportant: boolean; text: string }[] = [];
