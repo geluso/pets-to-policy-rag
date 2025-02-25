@@ -55,13 +55,6 @@ export default function TextArea({onSubmit}: Props) {
                 rows={3}
                 ref={textareaRef}
             />
-            <div className={value.length ? 'cursor-pointer' : ''} onClick={handleSubmit}>
-                {value.length ? (
-                    <div className="rounded-full bg-blue h-2 w-2" />
-                ) : (
-                    <img className="rounded-full bg-blue h-2 w-2" />
-                )}
-            </div>
         </div>
     )
 }
