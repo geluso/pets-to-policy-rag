@@ -22,7 +22,9 @@ export default function Search() {
 
   return (
     <div className="flex w-full h-full flex-col gap-1">
-      <SearchInput handleSubmit={handleSubmit} isSearching={isSearching} />
+      <div className="mb-4">
+        <SearchInput handleSubmit={handleSubmit} isSearching={isSearching} />
+      </div>
       {isInitialLoad ? (
         <Suggestions />
       ) : (
@@ -30,7 +32,7 @@ export default function Search() {
           <div className="w-1/2">
             <SourceDocuments sourceDocuments={sourceDocuments} />
           </div>
-          <div className="w-1/2">
+          <div className="w-1/2 pl-2 pr-2">
             <Paragraphs paragraphs={paragraphs} />
           </div>
         </div>
