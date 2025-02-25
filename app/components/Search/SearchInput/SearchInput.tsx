@@ -1,5 +1,6 @@
 import { useSearchParams } from "next/navigation"
 import { useState } from "react"
+import TextArea from "./TextArea"
 
 interface Props {
     handleSubmit: (inputValue: string) => void
@@ -15,23 +16,13 @@ export default function SearchInput({handleSubmit, isSearching}: Props) {
         handleSubmit(inputValue)
     }
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-          handleSubmit(inputValue)
-        }
-      }
-    
-      const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputValue(e.target.value)
-      }
-
     return (
         <div>
             <div className="pb-2 w-full">
               <h2>Query Texas Code About Unemployment Insurance Data</h2>
             </div>
             <div className="pb-2 w-full">
-              <input className="w-full box-border" value={inputValue} onChange={handleChange} onKeyDown={handleKeyDown} disabled={isSearching}/>
+              <TextArea onSubmit={setInputValue} />
             </div>
             <div>
               <button className="w-full" onClick={handleClick} disabled={isSearching}>Submit</button>
