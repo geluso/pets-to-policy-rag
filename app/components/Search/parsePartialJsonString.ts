@@ -1,94 +1,93 @@
-import { Paragraph } from "@/app/types";
+import { Paragraph, Span } from "@/app/types"
 
-export function parsePartialJsonString(streamedJson: string): Paragraph[] {
-    const stack: string[] = [];
+export function parsePartialJsonString(input: string): Paragraph[] {
+  // 1) Quick check for `"a":[[`
+  if (!input.includes('"a":[[')) {
+    return []
+  }
 
-    let buffer = "";
-    let insideString = false;
-    let escape = false;
-    let lastCompletedIndex = 0;
+  // We'll parse a single paragraph for demonstration,
+  // though you can extend it to multiple paragraphs if you want.
+  const paragraph: Span[] = []
 
-    console.log(streamedJson)
-
-    for (let i = 0; i < streamedJson.length; i++) {
-        const char = streamedJson[i];
-        buffer += char;
-
-        if (char === '"' && !escape) {
-            insideString = !insideString;
-        }
-
-        if (!insideString) {
-            if (char === '{' || char === '[') {
-                stack.push(char);
-            } else if (char === '}' || char === ']') {
-                if (stack.length) {
-                    const last = stack[stack.length - 1];
-                    if ((char === '}' && last === '{') || (char === ']' && last === '[')) {
-                        stack.pop();
-                    }
-                }
-            }
-        }
-
-        escape = char === '\\' ? !escape : false;
-
-        // Try parsing as soon as we have a new word (space or punctuation)
-        if (!insideString && (char === ' ' || char === '.' || char === ',' || char === '!' || char === '?')) {
-            try {
-                const parsed = JSON.parse(buffer);
-                if (parsed && typeof parsed === 'object' && Array.isArray(parsed.a)) {
-                    lastCompletedIndex = i + 1; // Mark progress
-                }
-            } catch {
-                continue; // JSON still incomplete
-            }
-        }
+  // 2) Search repeatedly for spans in the form `{"i":<bool>,"t":"<text>`
+  let pos = 0
+  while (true) {
+    // Look for the start of an object: `{"i":`
+    const iPos = input.indexOf('{"i":', pos)
+    if (iPos === -1) {
+      break
     }
 
-    // Trim buffer to last successfully parsed point
-    buffer = buffer.substring(0, lastCompletedIndex);
+    // Attempt to parse a single span
+    const { span, newPos } = parseSpan(input, iPos)
 
-    // Ensure it's a valid JSON object, applying fixes if necessary
-    if (!buffer.startsWith('{')) {
-        buffer = '{"a":[]}';
+    // If we fail to parse a span, stop altogether
+    if (!span) {
+      break
     }
 
-    if (!buffer.includes('"a":')) {
-        buffer = buffer.replace('{', '{"a":[],');
-    }
+    paragraph.push(span)
+    pos = newPos
+  }
 
-    if (!buffer.includes('"a":[')) {
-        buffer = buffer.replace('"a":', '"a":["') + '"]';
-    }
+  // 3) If we found at least one span, return it in a Paragraph array
+  if (paragraph.length > 0) {
+    return [paragraph]
+  } else {
+    // We did see `"a":[[`, but no complete spans => return [ [] ]
+    return [[]]
+  }
+}
 
-    const parsedJson: { a: { i: boolean; t: string }[][] } = JSON.parse(buffer || '{"a":[]}');
+function parseSpan(input: string, startPos: number): { span: Span | null; newPos: number } {
+  // `{"i":` is 5 characters, so next char is the start of "true" or "false"
+  const boolPos = startPos + 5 // <-- FIXED: was +6, which caused the bug
 
-    return parsedJson.a.map((paragraph) => {
-        const spans: { isImportant: boolean; text: string }[] = [];
-        let currentSpan: { isImportant: boolean; text: string } | null = null;
+  // Make sure we have enough string left
+  if (boolPos >= input.length) {
+    return { span: null, newPos: input.length }
+  }
 
-        for (const span of paragraph) {
-            if (!currentSpan) {
-                currentSpan = { isImportant: span.i, text: span.t };
-            } else {
-                currentSpan.text += " " + span.t;
-                if (span.i) {
-                    currentSpan.isImportant = true; // Apply importance only when span is fully built
-                }
-            }
+  // Read up to 5 characters to match 'false' or 'true'
+  const boolSnippet = input.substring(boolPos, boolPos + 5).toLowerCase()
+  let isImportant: boolean
+  let boolLen = 0
 
-            // If span ends in a punctuation or space, consider it complete
-            if (span.t.endsWith('.') || span.t.endsWith(',') || span.t.endsWith('!') || span.t.endsWith('?') || span.t.endsWith(' ')) {
-                spans.push(currentSpan);
-                currentSpan = null;
-            }
-        }
+  if (boolSnippet.startsWith("true")) {
+    isImportant = true
+    boolLen = 4
+  } else if (boolSnippet.startsWith("false")) {
+    isImportant = false
+    boolLen = 5
+  } else {
+    // incomplete => no parse
+    return { span: null, newPos: boolPos }
+  }
 
-        if (currentSpan) {
-            spans.push(currentSpan);
-        }
+  // Now look for `,"t":"`
+  const tMarker = ',"t":"'
+  const tMarkerPos = input.indexOf(tMarker, boolPos + boolLen)
+  if (tMarkerPos === -1) {
+    return { span: null, newPos: boolPos + boolLen }
+  }
 
-        return spans;
-    });
+  // Extract text until the next quote or end-of-string
+  const textStart = tMarkerPos + tMarker.length
+  let textEnd = input.indexOf('"', textStart)
+  if (textEnd === -1) {
+    textEnd = input.length
+  }
+
+  const text = input.substring(textStart, textEnd)
+  if (!text) {
+    // empty text => skip
+    return { span: null, newPos: textEnd }
+  }
+
+  // Return the recognized span
+  return {
+    span: { isImportant, text },
+    newPos: textEnd + 1, // move past closing quote if it exists
+  }
 }
