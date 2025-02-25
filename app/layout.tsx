@@ -27,7 +27,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-gray-300 antialiased flex flex-col w-full h-full m-0 p-0`}
       >
-        <div className="bg-blue-500 text-white p-1 pl-4">
+        <div className="bg-blue-500 text-white p-1 pl-4 border-solid border-t-0 border-l-0 border-r-0 border-b-1 border-gray-500">
           <h1>PETs to Policy</h1>
         </div>
         <div className="h-full w-4/5 ml-auto mr-auto bg-white border-t-0 border-b-0 border-x-1 border-solid border-black p-2">

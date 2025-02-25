@@ -42,7 +42,7 @@ export default function TextArea({onSubmit}: Props) {
     }, [value])
 
     return (
-        <div className={`rounded-[4px] border border-[#E5E7EB] flex p-5 items-end gap-2`}>
+        <div>
             <textarea
                 value={value}
                 onChange={handleChange}
@@ -50,9 +50,9 @@ export default function TextArea({onSubmit}: Props) {
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
                 placeholder={`Ask me something about the laws of the land`}
-                className="w-full outline-none resize-none leading-[22px] p-1"
+                className="w-full box-border outline-none resize-none leading-[22px] p-1"
                 autoFocus
-                rows={1}
+                rows={3}
                 ref={textareaRef}
             />
             <div className={value.length ? 'cursor-pointer' : ''} onClick={handleSubmit}>
