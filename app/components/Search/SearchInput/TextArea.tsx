@@ -1,24 +1,19 @@
-import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react"
-import rightArrowIcon from "assets/svg/right-arrow.svg"
-import rightArrowBlueIcon from "assets/svg/right-arrow-blue.svg"
+import { ChangeEvent, KeyboardEvent } from "react"
 
 interface Props {
+    inputValue: string
+    setInputValue: (text: string) => void
     onSubmit: (text: string) => void
 }
 
-export default function TextArea({onSubmit}: Props) {
-    const [isFocused, setIsFocused] = useState(false)
-    const [value, setValue] = useState('')
-    const textareaRef = useRef<HTMLTextAreaElement>(null)
-
+export default function TextArea({ inputValue, setInputValue, onSubmit }: Props) {
     const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        setValue(e.target.value)
-        adjustTextareaHeight()
+        setInputValue(e.target.value)
     }
 
     const handleSubmit = () => {
-        if (value) {
-            onSubmit(value)
+        if (inputValue) {
+            onSubmit(inputValue)
         }
     }
 
@@ -29,31 +24,16 @@ export default function TextArea({onSubmit}: Props) {
         }
     }
 
-    const adjustTextareaHeight = () => {
-        const textarea = textareaRef.current
-        if (textarea) {
-            textarea.style.height = 'auto'
-            textarea.style.height = `${textarea.scrollHeight}px`
-        }
-    }
-
-    useEffect(() => {
-        adjustTextareaHeight()
-    }, [value])
-
     return (
         <div>
             <textarea
-                value={value}
+                value={inputValue}
                 onChange={handleChange}
                 onKeyDown={handleEnterPress}
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
                 placeholder={`Ask me something about the laws of the land`}
                 className="w-full box-border outline-none resize-none leading-[22px] p-1"
                 autoFocus
                 rows={3}
-                ref={textareaRef}
             />
         </div>
     )

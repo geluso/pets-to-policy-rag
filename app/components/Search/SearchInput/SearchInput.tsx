@@ -22,7 +22,7 @@ export default function SearchInput({handleSubmit, isSearching}: Props) {
               <h2>Query Texas Code About Unemployment Insurance Data</h2>
             </div>
             <div className="pb-2 w-full">
-              <TextArea onSubmit={setInputValue} />
+              <TextArea inputValue={inputValue} setInputValue={setInputValue} onSubmit={handleSubmit} />
             </div>
             <div>
               <button className="w-full" onClick={handleClick} disabled={isSearching}>Submit</button>
