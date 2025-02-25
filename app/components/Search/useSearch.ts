@@ -2,6 +2,7 @@ import { getSearchResults } from '@/app/lib/rag_server/api'
 import { Paragraph, SourceDocument } from '@/app/types'
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { parsePartialJsonString } from './parsePartialJsonString'
+import { rawFullJSON, rawParagraphsJSON } from './_mock'
 
 export function useSearch(): {
     sourceDocuments: SourceDocument[]
@@ -48,11 +49,6 @@ export function useSearch(): {
         const decoder = new TextDecoder()
 
         let buffer = ''
-
-
-
-        console.log('mounted')
-
         while (isMounted.current) {
             const { done, value } = await reader.read()
             if (done) break
@@ -61,18 +57,12 @@ export function useSearch(): {
 
             buffer += delta
             const parsedJSONParagraphs = parsePartialJsonString(buffer)
-
-            // console.log(parsedJSONParagraphs)
-
             if (parsedJSONParagraphs.length > 0) {
-
                 setParagraphs(parsedJSONParagraphs)
             }
-            // console.log({ delta, buffer, json: parsedJSONParagraphs })
-            // const nextParagraph = [{ isImportant: Math.random() < .5, text: delta }]
-            // setParagraphs(prevParagraphs => [...prevParagraphs, nextParagraph])
         }
         setIsSearching(false)
+        setParagraphs(JSON.parse(rawParagraphsJSON))
 
         if (isMounted.current) {
             setIsSearching(false)
