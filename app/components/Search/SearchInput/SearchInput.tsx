@@ -27,8 +27,12 @@ export default function SearchInput({handleSubmit, isSearching}: Props) {
 
     return (
         <div>
-            <input value={inputValue} onChange={handleChange} onKeyDown={handleKeyDown} disabled={isSearching}/>
-            <button onClick={handleClick} disabled={isSearching}>Submit</button>
+            <div className="pb-2 w-full">
+              <input className="w-full box-border" value={inputValue} onChange={handleChange} onKeyDown={handleKeyDown} disabled={isSearching}/>
+            </div>
+            <div>
+              <button className="w-full" onClick={handleClick} disabled={isSearching}>Submit</button>
+            </div>
         </div>
     )
 }
