@@ -2,7 +2,7 @@ import { getSearchResults } from '@/app/lib/rag_server/api'
 import { Paragraph, SourceDocument } from '@/app/types'
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { parsePartialJsonString } from './parsePartialJsonString'
-import { rawFullJSON, rawParagraphsJSON } from './_mock'
+import { rawParagraphsJSON } from './_mock'
 
 export function useSearch(): {
     sourceDocuments: SourceDocument[]
