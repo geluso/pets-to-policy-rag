@@ -1,15 +1,17 @@
 "use server"
 
 import OpenAI from "openai";
+import { bridgeOnePrompt, outerSystemPrompt } from "./prompts";
 const openai = new OpenAI();
 
 export async function preprocessQuery(query: string): Promise<string> {
-  const content = `You are a legal AI assistant improving user search queries for a legal document retrieval system. 
-  Given the following user query, expand it into a well-formed legal search query while maintaining its intent.
+  const content = `
+    ${outerSystemPrompt}
 
-  User Query: "${query}"
+    ${bridgeOnePrompt}
 
-  Expanded Legal Query:`;
+    Input User Query: "${query}"
+  `;
   const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [ { role: "user", content } ],
