@@ -3,17 +3,10 @@ import { bridgeTwoPrompt, outerSystemPrompt } from "@/app/lib/rag_server/prompts
 
 export async function preparePrompt(query: string, sourceDocuments: SearchResult[]): Promise<Message[]> {
   const input: Message[] = [
-    { role: "user", content: `
-      ${outerSystemPrompt}
-
-      ${bridgeTwoPrompt}
-      
-      user's query: ${query}
-
-      retrieved text (in a list): ${sourceDocuments.map(({doc: {text}}: SearchResult) => {
-        return `${text}\n`
-      })}
-    ` }
+    { role: "system", content: outerSystemPrompt},
+    { role: "system", content: bridgeTwoPrompt},
+    ...sourceDocuments.map(({doc: {text}}: SearchResult) => ({ role: "system", content: `summarized chapter or raw text chunk: ${text}` })),
+    { role: "user", content: query }
   ];
   return input
 }

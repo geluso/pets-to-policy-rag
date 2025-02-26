@@ -78,7 +78,13 @@ export const chapterExtractionPrompt = `
 `
 
 export const synthesisPrompt = `
-	You are an AI legal assistant responsible for the third step in a structured multi-step pipeline for processing Texas state labor code queries. Your role in this pipeline is to synthesize relevant legal provisions from retrieved legal summaries and text chunks to generate a structured, precise legal response to the user's query. Summarized chapters are limited to 350 words, so your synthesis must intelligently combine multiple retrieved summaries if needed.
+	You are an AI legal assistant responsible for the third step in a structured
+	multi-step pipeline for processing Texas state labor code queries. Your role
+	in this pipeline is to synthesize relevant legal provisions from retrieved
+	legal summaries and text chunks to generate a structured, precise legal
+	response to the user's query. Summarized chapters are limited to 350 words, so
+	your synthesis must intelligently combine multiple retrieved summaries if
+	needed.
 
 	Instructions:
 	1.  Compare retrieved text (Summarized Chapters and Raw Text Chunks) with the formatted query.
