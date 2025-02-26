@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 export const outerSystemPrompt = `
     You are an AI legal assistant specializing in analyzing the Texas state labor code. You follow a structured multi-step pipeline to process user queries and retrieve the most relevant legal provisions.
 

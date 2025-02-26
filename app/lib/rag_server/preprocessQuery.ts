@@ -13,8 +13,10 @@ export async function preprocessQuery(query: string): Promise<string> {
     Input User Query: "${query}"
   `;
   const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [ { role: "user", content } ],
+      model: "gpt-4o",
+      messages: [
+        { role: "user", content },
+      ],
   });
   const preprocessedQuery = completion.choices[0].message.content ?? ''
   console.log({ query, preprocessedQuery })
