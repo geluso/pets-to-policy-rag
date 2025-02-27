@@ -1,6 +1,6 @@
 "use client"
 
-import Paragraphs from "./Paragraphs/Paragraphs"
+import SmartSummary from "./SmartSummary/SmartSummary"
 import SearchInput from "./SearchInput/SearchInput"
 import { useSearch } from "./useSearch"
 import { useEffect, useState } from "react"
@@ -28,12 +28,12 @@ export default function Search() {
       {isInitialLoad ? (
         <Suggestions />
       ) : (
-        <div className="flex w-full h-full">
-          <div className="w-1/2">
-            <SourceDocuments sourceDocuments={sourceDocuments} />
+        <div className="flex flex-col w-full h-full">
+          <div>
+            <SmartSummary paragraphs={paragraphs} />
           </div>
-          <div className="w-1/2 pl-2 pr-2">
-            <Paragraphs paragraphs={paragraphs} />
+          <div>
+            <SourceDocuments sourceDocuments={sourceDocuments} />
           </div>
         </div>
       )}

@@ -10,13 +10,18 @@ export interface Span {
 
 export type Paragraph = Span[]
 
-export interface SourceDocument {
+export type SearchResult = {
+    score: number,
+    doc: SourceDocumentProps
+}
+
+export interface SourceDocumentProps {
     title: string
     url: string
     text: string
 }
 
-export type SearchResult = {
-    score: number,
-    doc: SourceDocument
+export interface RenderedSourceDocumentProps {
+    citation: string
+    relevantLanguage: Paragraph[]
 }

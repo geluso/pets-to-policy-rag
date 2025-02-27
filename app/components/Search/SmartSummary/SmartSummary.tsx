@@ -4,11 +4,11 @@ interface Props {
     paragraphs: Paragraph[]
 }
 
-export default function Paragraphs({paragraphs}: Props) {
+export default function SmartSummary({paragraphs}: Props) {
     console.log('paragraphs', paragraphs)
     return (
         <div className="w-full h-full border-1 flex-col gap-1">
-            {paragraphs.length > 0 && <h3 className="mt-0">💡 Answer</h3>}
+            {paragraphs.length > 0 && <h3 className="mt-0">🧠 Smart Summary</h3>}
             {paragraphs.map((paragraph, index) => (
                 <span key={`paragraph-${index}`}>
                     {paragraph.map(({isImportant, text}, index) => (

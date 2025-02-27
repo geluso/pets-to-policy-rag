@@ -26,7 +26,7 @@ export const outerSystemPrompt = `
 	•	Raw Text: {Full excerpt of relevant section, Highlight key terms in red}
 	•	Smart Summary: {Definitions, Data Sources, Responsible Parties}
 
-    This ensures every stage references a common structured vocabulary and format.
+  This ensures every stage references a common structured vocabulary and format.
 `
 
 export const bridgeOnePrompt = `

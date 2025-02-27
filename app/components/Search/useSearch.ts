@@ -1,15 +1,15 @@
 import { getSearchResults } from '@/app/lib/rag_server/api'
-import { Paragraph, SourceDocument } from '@/app/types'
+import { Paragraph, SourceDocumentProps } from '@/app/types'
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { parsePartialJsonString } from './parsePartialJsonString'
 
 export function useSearch(): {
-    sourceDocuments: SourceDocument[]
+    sourceDocuments: SourceDocumentProps[]
     paragraphs: Paragraph[]
     isSearching: boolean
     search: (query: string) => Promise<void>
 } {
-    const [sourceDocuments, setSourceDocuments] = useState<SourceDocument[]>([])
+    const [sourceDocuments, setSourceDocuments] = useState<SourceDocumentProps[]>([])
     const [paragraphs, setParagraphs] = useState<Paragraph[]>([])
     const [isSearching, setIsSearching] = useState(false)
     const isMounted = useRef(true)

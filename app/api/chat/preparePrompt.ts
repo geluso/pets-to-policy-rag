@@ -5,7 +5,7 @@ export async function preparePrompt(query: string, sourceDocuments: SearchResult
   const input: Message[] = [
     { role: "system", content: outerSystemPrompt},
     { role: "system", content: bridgeTwoPrompt},
-    ...sourceDocuments.map(({doc: {text}}: SearchResult) => ({ role: "system", content: `summarized chapter or raw text chunk: ${text}` })),
+    ...sourceDocuments.map(({doc: { text }}: SearchResult) => ({ role: "system", content: `summarized chapter or raw text chunk: ${text}` })),
     { role: "user", content: query }
   ];
   return input
