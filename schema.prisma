@@ -16,3 +16,16 @@ model prompt_configuration {
   document_message String
   human_message String   
 }
+
+model indexed_chunk {
+  id String @id
+  url String
+  chunk_text String
+  chunk_index Int
+}
+
+model summary_readable {
+  id String @id
+  url String
+  summaryReadable String
+}
