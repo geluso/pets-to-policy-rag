@@ -1,27 +1,25 @@
-export interface Message {
-    role: string
-    content: string
-}
-
-export interface Span {
-    isImportant: boolean
-    text: string
-}
-
-export type Paragraph = Span[]
-
-export type SearchResult = {
-    score: number,
-    doc: SourceDocumentProps
-}
-
-export interface SourceDocumentProps {
-    title: string
+export type Chunk = {
     url: string
-    text: string
+    chunkText: string
+    chunkIndex: number
 }
 
-export interface RenderedSourceDocumentProps {
+export type SummaryReadable = {
+    url: string
+    summaryText: string
+}
+
+export interface ChunkCollection {
+    chunks: Chunk[]
+    summaryReadable: SummaryReadable
+}
+
+export type SmartSummary = string
+
+export interface SourceDocument {
+    url: string
+    question: string
     citation: string
-    relevantLanguage: Paragraph[]
+    relevantSubsections: string
+    relevantLanguage: string
 }

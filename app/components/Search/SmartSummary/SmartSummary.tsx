@@ -1,23 +1,12 @@
-import { Paragraph } from "@/app/types"
-
 interface Props {
-    paragraphs: Paragraph[]
+    smartSummary: string
 }
 
-export default function SmartSummary({paragraphs}: Props) {
-    console.log('paragraphs', paragraphs)
+export default function SmartSummary({smartSummary}: Props) {
     return (
         <div className="w-full h-full border-1 flex-col gap-1">
-            {paragraphs.length > 0 && <h3 className="mt-0">🧠 Smart Summary</h3>}
-            {paragraphs.map((paragraph, index) => (
-                <span key={`paragraph-${index}`}>
-                    {paragraph.map(({isImportant, text}, index) => (
-                        <span key={`text-${index}`} className={`${isImportant ? 'text-red-500' : 'text-black'}`}>
-                            {text}
-                        </span>
-                    ))}
-                </span>
-            ))}
+            <h3 className="mt-0">🧠 Smart Summary</h3>
+            <div>{smartSummary}</div>
         </div>
     )
 }
