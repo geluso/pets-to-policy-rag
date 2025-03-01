@@ -18,14 +18,12 @@ model prompt_configuration {
 }
 
 model indexed_chunk {
-  id String @id
-  url String
+  url String @id
   chunk_text String
   chunk_index Int
 }
 
 model summary_readable {
-  id String @id
-  url String
-  summaryReadable String
+  url String @id
+  summary_readable String
 }
