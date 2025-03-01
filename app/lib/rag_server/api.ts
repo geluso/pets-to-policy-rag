@@ -13,10 +13,23 @@ export async function getChunks(query: string): Promise<Chunk[]> {
     try {
         const preprocessedQuery = await preprocessQuery(query)
         
-        return await fetch(URL_SEARCH + '?q=' + preprocessedQuery).then(({json}) => json())
-    } catch(error) {
-        console.error(`GET ${URL_SEARCH}`, error)
+        const response = await fetch(URL_SEARCH + '?q=' + encodeURIComponent(preprocessedQuery))
+        
+        if (!response.ok) {
+            throw new Error(`Failed to fetch chunks: ${response.status} ${response.statusText}`)
+        }
 
+        const chunksWithScore = await response.json() as {doc: Chunk, score: number}[]
+
+        if (!chunksWithScore.length) {
+            return []
+        }
+
+        console.log("CHUNKS WITH SCORE", chunksWithScore)
+
+        return chunksWithScore.map(({doc}) => doc).reverse()
+    } catch (error) {
+        console.error(`GET ${URL_SEARCH}`, error)
         return []
     }
 }
