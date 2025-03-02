@@ -21,7 +21,6 @@ export async function POST(req: NextRequest) {
         const json = await req.json()
         const query: string = json.query
         const chunkCollection: ChunkCollection = json.chunkCollection
-
         const response = await openai.chat.completions.create({
             model: 'gpt-4o',
             messages: [
@@ -42,6 +41,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json(parsedResponse)
     } catch (error) {
         console.error('POST /api/source-documents Error:', error)
+
         return NextResponse.json({error: 'Failed to generate source documents'}, {status: 500})
     }
 }

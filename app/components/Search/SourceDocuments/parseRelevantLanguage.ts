@@ -3,31 +3,28 @@ export interface Span {
     isImportant: boolean
 }
 
-export type Paragraph = Span[]
+export const parseRelevantLanguage = (relevantLanguage: string): Span[] => {
+    const spans: Span[] = []
+    const regex = /{{HIGHLIGHT}}(.*?){{HIGHLIGHT}}/g
 
-export const parseRelevantLanguage = (relevantLanguage: string): Paragraph[] => {
-    return relevantLanguage.split('\n\n').map(paragraph => {
-        const spans: Span[] = []
-        let buffer = ''
-        let isImportant = false
+    let lastIndex = 0
+    let match: RegExpExecArray | null
 
-        for (let i = 0; i < paragraph.length; i++) {
-            if (paragraph.slice(i, i + 11) === '{{HIGHLIGHT}}') {
-                if (buffer) {
-                    spans.push({ text: buffer, isImportant })
-                    buffer = ''
-                }
-                isImportant = !isImportant
-                i += 10 // Skip the entire '{{HIGHLIGHT}}'
-            } else {
-                buffer += paragraph[i]
-            }
+    while ((match = regex.exec(relevantLanguage)) !== null) {
+        const beforeText = relevantLanguage.slice(lastIndex, match.index)
+        if (beforeText) {
+            spans.push({isImportant: false, text: beforeText})
         }
 
-        if (buffer) {
-            spans.push({text: buffer, isImportant})
-        }
+        spans.push({isImportant: true, text: match[1]})
 
-        return spans
-    })
+        lastIndex = regex.lastIndex
+    }
+
+    const remainingText = relevantLanguage.slice(lastIndex)
+    if (remainingText) {
+        spans.push({isImportant: false, text: remainingText})
+    }
+
+    return spans
 }

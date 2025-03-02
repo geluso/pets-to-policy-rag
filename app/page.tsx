@@ -1,11 +1,10 @@
-import Search from "./components/Search/Search";
-import ClientWrapper from "./HOC/ClientWrapper";
-
+import { Suspense } from 'react'
+import Search from './components/Search/Search'
 
 export default async function SearchPage() {
-  return (
-     <ClientWrapper>
-      <Search />
-    </ClientWrapper>
-  )
+    return (
+        <Suspense fallback={<>Loading...</>}>
+            <Search />
+        </Suspense>
+    )
 }

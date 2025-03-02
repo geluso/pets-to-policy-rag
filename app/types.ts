@@ -1,10 +1,17 @@
-export type Chunk = {
+export interface SimilarChunk {
     url: string
-    chunkText: string
-    chunkIndex: number
+    text: string
+    chunk_index: number
 }
 
-export type SummaryReadable = {
+export interface Chunk {
+    id: number
+    url: string
+    chunk_text: string
+    chunk_index: number
+}
+
+export interface SummaryReadable {
     url: string
     summaryText: string
 }

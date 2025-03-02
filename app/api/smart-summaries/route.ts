@@ -12,7 +12,6 @@ export async function POST(req: NextRequest) {
         const json = await req.json()
         const query: string = json.query
         const chunkCollections: ChunkCollection[] = json.chunkCollections
-
         const encoder = new TextEncoder()
         const readableStream = new ReadableStream({
             async start(controller) {
@@ -27,8 +26,7 @@ export async function POST(req: NextRequest) {
                     .on('refusal.done', () => console.log('request refused'))
                     .on('content.delta', ({delta}) => {
                         if (delta) {
-                            console.log('Streaming delta:', delta)
-                            controller.enqueue(encoder.encode(delta + '\n'))
+                            controller.enqueue(encoder.encode(delta))
                         }
                     })
                     .on('content.done', () => {
@@ -52,7 +50,7 @@ export async function POST(req: NextRequest) {
             },
         })
     } catch (error) {
-        console.error('POST /api/chat Error:', error)
+        console.error('POST /api/smart-summaries Error:', error)
 
         return new Response('Internal Server Error', {status: 500})
     }

@@ -1,6 +1,6 @@
-import { Chunk, SummaryReadable, ChunkCollection } from "@/app/types";
+import { Chunk, SummaryReadable, ChunkCollection, SimilarChunk } from "@/app/types";
 
-async function fetchSummaryReadable({url}: Chunk): Promise<SummaryReadable | null> {
+async function fetchSummaryReadable({url}: SimilarChunk): Promise<SummaryReadable | null> {
     try {
         const response = await fetch(`/api/summary-readables?url=${encodeURIComponent(url)}`)
 
@@ -18,7 +18,7 @@ async function fetchSummaryReadable({url}: Chunk): Promise<SummaryReadable | nul
     }
 }
 
-async function fetchAllSummaryReadables(chunks: Chunk[]): Promise<Record<string, SummaryReadable>> {
+async function fetchAllSummaryReadables(chunks: SimilarChunk[]): Promise<Record<string, SummaryReadable>> {
     const results = await Promise.all(chunks.map(async (chunk) => {
         const summary = await fetchSummaryReadable(chunk)
 
@@ -34,9 +34,9 @@ async function fetchAllSummaryReadables(chunks: Chunk[]): Promise<Record<string,
     }, {} as Record<string, SummaryReadable>)
 }
 
-async function fetchAdjacentChunks({url, chunkIndex}: Chunk): Promise<Chunk[] | null> {
+async function fetchAdjacentChunks({url, chunk_index}: SimilarChunk): Promise<Chunk[] | null> {
     try {
-        const response = await fetch(`/api/indexed-chunks?url=${encodeURIComponent(url)}&chunkIndex=${chunkIndex}`)
+        const response = await fetch(`/api/indexed-chunks?url=${encodeURIComponent(url)}&chunkIndex=${chunk_index}`)
 
         if (!response.ok) {
             throw new Error('Failed to fetch adjacent chunks')
@@ -50,7 +50,7 @@ async function fetchAdjacentChunks({url, chunkIndex}: Chunk): Promise<Chunk[] | 
     }
 }
 
-async function fetchAllAdjacentChunks(chunks: Chunk[]): Promise<Record<string, Chunk[]>> {
+async function fetchAllAdjacentChunks(chunks: SimilarChunk[]): Promise<Record<string, Chunk[]>> {
     const results = await Promise.all(chunks.map(async (chunk) => {
         const adjacentChunks = await fetchAdjacentChunks(chunk)
 
@@ -66,7 +66,7 @@ async function fetchAllAdjacentChunks(chunks: Chunk[]): Promise<Record<string, C
     }, {} as Record<string, Chunk[]>)
 }
 
-export async function fetchChunkCollections(chunks: Chunk[]): Promise<ChunkCollection[]> {
+export async function fetchChunkCollections(chunks: SimilarChunk[]): Promise<ChunkCollection[]> {
     const [summaryReadables, adjacentChunks] = await Promise.all([
         fetchAllSummaryReadables(chunks),
         fetchAllAdjacentChunks(chunks)

@@ -1,4 +1,4 @@
-import { ChunkCollection } from "./types"
+import { ChunkCollection } from './types'
 
 export const generateOuterPrompt = () => `
 # OUTER SYSTEM PROMPT

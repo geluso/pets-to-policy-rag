@@ -5,7 +5,7 @@ export async function fetchSmartSummaryStreamWithCallback(
     chunkCollections: ChunkCollection[],
     onData: (delta: string) => void,
 ) {
-    const response = await fetch('/api/chat', {
+    const response = await fetch('/api/smart-summaries', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({query, chunkCollections}),
@@ -20,12 +20,10 @@ export async function fetchSmartSummaryStreamWithCallback(
     const decoder = new TextDecoder()
 
     while (true) {
-        const { done, value } = await reader.read()
+        const {done, value} = await reader.read()
+
         if (done) break
 
-        const delta = decoder.decode(value, {stream: true})
-        if (delta.trim()) {
-            onData(delta)
-        }
+        onData(decoder.decode(value, {stream: true}))
     }
 }

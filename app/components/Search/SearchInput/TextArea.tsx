@@ -1,12 +1,13 @@
-import { ChangeEvent, KeyboardEvent } from "react"
+import { ChangeEvent, KeyboardEvent } from 'react'
 
 interface Props {
     inputValue: string
     setInputValue: (text: string) => void
     onSubmit: (text: string) => void
+    isSearching: boolean
 }
 
-export default function TextArea({ inputValue, setInputValue, onSubmit }: Props) {
+export default function TextArea({inputValue, setInputValue, onSubmit, isSearching}: Props) {
     const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         setInputValue(e.target.value)
     }
@@ -25,16 +26,15 @@ export default function TextArea({ inputValue, setInputValue, onSubmit }: Props)
     }
 
     return (
-        <div>
-            <textarea
-                value={inputValue}
-                onChange={handleChange}
-                onKeyDown={handleEnterPress}
-                placeholder={`Ask me something about the laws of the land`}
-                className="w-full box-border outline-none resize-none leading-[22px] p-1"
-                autoFocus
-                rows={3}
-            />
-        </div>
+        <textarea
+            disabled={isSearching}
+            value={inputValue}
+            onChange={handleChange}
+            onKeyDown={handleEnterPress}
+            placeholder={`Ask me something about the laws of the land`}
+            className="w-full box-border outline-none resize-none leading-[22px] p-1"
+            autoFocus
+            rows={3}
+        />
     )
 }

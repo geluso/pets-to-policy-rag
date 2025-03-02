@@ -1,6 +1,6 @@
 'use server'
 
-import { Chunk } from '@/app/types'
+import { SimilarChunk } from '@/app/types'
 import { preprocessQuery } from './preprocessQuery'
 
 // const LOCAL_URL_BASE = 'http://localhost:8080'
@@ -9,7 +9,7 @@ const NGROK_URL_BASE = 'https://4cb3-2601-602-8b82-92b0-64d0-4b7b-a51a-85fb.ngro
 const URL_BASE = NGROK_URL_BASE
 const URL_SEARCH = URL_BASE + '/search/'
 
-export async function getChunks(query: string): Promise<Chunk[]> {
+export async function getChunks(query: string): Promise<SimilarChunk[]> {
     try {
         const preprocessedQuery = await preprocessQuery(query)
         
@@ -19,15 +19,28 @@ export async function getChunks(query: string): Promise<Chunk[]> {
             throw new Error(`Failed to fetch chunks: ${response.status} ${response.statusText}`)
         }
 
-        const chunksWithScore = await response.json() as {doc: Chunk, score: number}[]
+        const chunksWithScore = await response.json() as {doc: SimilarChunk, score: number}[]
 
         if (!chunksWithScore.length) {
             return []
         }
 
-        console.log("CHUNKS WITH SCORE", chunksWithScore)
-
         return chunksWithScore.map(({doc}) => doc).reverse()
+
+            // TODO: remove this filter
+            .filter(({url}) => {
+                const isUnsupportedURL = [
+                    'https://statutes.capitol.texas.gov/Docs/LA/htm/LA.302.htm',
+                    'https://statutes.capitol.texas.gov/Docs/LA/htm/LA.408.htm'
+                ].includes(url)
+
+                return !isUnsupportedURL
+            })
+
+            .filter((_, index) => {
+                return index < 2
+            })
+
     } catch (error) {
         console.error(`GET ${URL_SEARCH}`, error)
         return []
