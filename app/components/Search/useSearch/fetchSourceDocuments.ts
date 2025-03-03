@@ -44,5 +44,5 @@ export async function fetchSourceDocuments(query: string, chunkCollections: Chun
         })
     )
 
-    return results.filter((doc): doc is SourceDocument => doc !== null) // Ensure type safety
+    return results.filter((doc): doc is SourceDocument => doc !== null)
 }

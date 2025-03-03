@@ -30,3 +30,11 @@ export interface SourceDocument {
     relevantSubsections: string
     relevantLanguage: string
 }
+
+export enum SearchStatus {
+    DEFAULT = 'Default',
+    FINDING_CHUNKS = 'Finding Chunks',
+    FILTERING_CHUNKS = 'Filtering Chunks',
+    GENERATING_SUMMARY = 'Generating Summary',
+    GENERATING_DOCUMENTS = 'Generating Documents',
+}

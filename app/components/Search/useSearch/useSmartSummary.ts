@@ -4,32 +4,38 @@ import { fetchSmartSummaryStreamWithCallback } from './fetchSmartSummaryStreamWi
 
 export default function useSmartSummary(): {
     smartSummary: SmartSummary
+    resetSmartSummary: () => void
     generateSmartSummary: (query: string, chunkCollections: ChunkCollection[]) => Promise<void>
-    isStreamingSmartSummary: boolean
+    isInitializingSmartSummary: boolean
 } {
     const [smartSummary, setSmartSummary] = useState<SmartSummary>('')
-    const [isStreamingSmartSummary, setIsStreamingSmartSummary] = useState<boolean>(false)
+    const [isInitializingSmartSummary, setIsInitializingSmartSummary] = useState<boolean>(false)
 
     const generateSmartSummary = useCallback(async (query: string, chunkCollections: ChunkCollection[]) => {
-        setIsStreamingSmartSummary(true)
-        setSmartSummary('')
+        setIsInitializingSmartSummary(true)
 
         try {
             await fetchSmartSummaryStreamWithCallback(
                 query,
                 chunkCollections,
-                (delta) => setSmartSummary((prev) => prev + delta)
+                (delta) => {
+                    setSmartSummary((prev) => prev + delta)
+                    setIsInitializingSmartSummary(false)
+                },
             )
         } catch (error) {
             console.error('USE SMART SUMMARY', error)
-        } finally {
-            setIsStreamingSmartSummary(false)
         }
+    }, [])
+
+    const resetSmartSummary = useCallback(() => {
+        setSmartSummary('')
     }, [])
 
     return {
         smartSummary,
+        resetSmartSummary,
         generateSmartSummary,
-        isStreamingSmartSummary,
+        isInitializingSmartSummary,
     }
 }

@@ -4,6 +4,7 @@ import { fetchSourceDocuments } from './fetchSourceDocuments'
 
 export default function useSourceDocuments(): {
     sourceDocuments: SourceDocument[]
+    resetSourceDocuments: () => void
     generateSourceDocuments: (query: string, chunkCollections: ChunkCollection[]) => Promise<void>
     isGeneratingSourceDocuments: boolean
 } {
@@ -12,7 +13,6 @@ export default function useSourceDocuments(): {
 
     const generateSourceDocuments = useCallback(async (query: string, chunkCollections: ChunkCollection[]) => {
         setIsGeneratingSourceDocuments(true)
-        setSourceDocuments([])
 
         try {
             const documents = await fetchSourceDocuments(query, chunkCollections)
@@ -24,8 +24,13 @@ export default function useSourceDocuments(): {
         }
     }, [])
 
+    const resetSourceDocuments = useCallback(() => {
+        setSourceDocuments([])
+    }, [])
+
     return {
         sourceDocuments,
+        resetSourceDocuments,
         generateSourceDocuments,
         isGeneratingSourceDocuments,
     }

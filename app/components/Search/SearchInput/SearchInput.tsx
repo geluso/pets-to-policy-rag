@@ -1,16 +1,20 @@
-import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import TextArea from './TextArea'
+import { SearchStatus } from '@/app/types'
 
 interface Props {
     handleSubmit: (inputValue: string) => void
-    isSearching: boolean
+    searchStatus: SearchStatus
 }
 
-export default function SearchInput({handleSubmit, isSearching}: Props) {
-    const searchParams = useSearchParams()
-    const initialValue = searchParams.get('q') ?? ''
-    const [inputValue, setInputValue] = useState(initialValue)
+export default function SearchInput({handleSubmit, searchStatus}: Props) {
+    const [inputValue, setInputValue] = useState('')
+    const isSearching = [
+        SearchStatus.FINDING_CHUNKS,
+        SearchStatus.FILTERING_CHUNKS,
+        SearchStatus.GENERATING_SUMMARY,
+        SearchStatus.GENERATING_DOCUMENTS,
+    ].includes(searchStatus)
 
     const handleClick = () => {
         handleSubmit(inputValue)

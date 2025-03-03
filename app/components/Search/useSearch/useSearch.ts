@@ -1,6 +1,6 @@
 import { getChunks } from '@/app/lib/rag_server/api'
-import { SmartSummary, SourceDocument } from '@/app/types'
-import { useCallback, useState } from 'react'
+import { SearchStatus, SmartSummary, SourceDocument } from '@/app/types'
+import { useCallback, useState, useEffect } from 'react'
 import useSmartSummary from './useSmartSummary'
 import useSourceDocuments from './useSourceDocuments'
 import { fetchChunkCollections } from './fetchChunkCollections'
@@ -8,57 +8,61 @@ import { fetchRelevantChunks } from './fetchRelevantChunks'
 
 export default function useSearch(): {
     search: (query: string) => Promise<void>
-    hasSearched: boolean
-    isSearching: boolean
-    isStreamingSmartSummary: boolean
-    isGeneratingSourceDocuments: boolean
+    searchStatus: SearchStatus
     smartSummary: SmartSummary
     sourceDocuments: SourceDocument[]
-
 } {
-    const [isSearching, setIsSearching] = useState<boolean>(false)
-    const [hasSearched, setHasSearched] = useState<boolean>(false)
-    const {smartSummary, generateSmartSummary, isStreamingSmartSummary} = useSmartSummary()
-    const {sourceDocuments, generateSourceDocuments, isGeneratingSourceDocuments} = useSourceDocuments()
+    const [searchStatus, setSearchStatus] = useState<SearchStatus>(SearchStatus.DEFAULT)
+    const {smartSummary, resetSmartSummary, generateSmartSummary, isInitializingSmartSummary} = useSmartSummary()
+    const {sourceDocuments, resetSourceDocuments, generateSourceDocuments} = useSourceDocuments()
 
     const search = useCallback(async (query: string) => {
-        setIsSearching(true)
-        setHasSearched(true)
 
         try {
+            resetSmartSummary()
+            resetSourceDocuments()
+            setSearchStatus(SearchStatus.FINDING_CHUNKS)
             const foundChunks = await getChunks(query)
 
             if (foundChunks.length === 0) {
                 console.warn(`No chunks found for query: ${query}`)
-
+                setSearchStatus(SearchStatus.DEFAULT)
                 return
             }
 
-            const relevantChunks = await fetchRelevantChunks(query, foundChunks)
+            // setSearchStatus(SearchStatus.FILTERING_CHUNKS)
+            // const relevantChunks = await fetchRelevantChunks(query, foundChunks)
 
-            if (relevantChunks.length === 0) {
-                console.warn(`No relevant chunks found for query: ${query}`)
+            // if (relevantChunks.length === 0) {
+            //     console.warn(`No relevant chunks found for query: ${query}`)
+            //     setSearchStatus(SearchStatus.DEFAULT)
+            //     return
+            // }
 
-                return
-            }
+            const chunkCollections = await fetchChunkCollections(foundChunks)
 
-            const chunkCollections = await fetchChunkCollections(relevantChunks)
-
+            setSearchStatus(SearchStatus.GENERATING_SUMMARY)
             generateSmartSummary(query, chunkCollections)
+
             await generateSourceDocuments(query, chunkCollections)
-        } catch(error) {
+        } catch (error) {
             console.error('USE SEARCH', error)
         } finally {
-            setIsSearching(false)
+            setSearchStatus(SearchStatus.DEFAULT)
         }
     }, [])
 
+    useEffect(() => {
+        if (isInitializingSmartSummary) {
+            setSearchStatus(SearchStatus.GENERATING_SUMMARY)
+        } else if (smartSummary) {
+            setSearchStatus(SearchStatus.GENERATING_DOCUMENTS)
+        }
+    }, [isInitializingSmartSummary, smartSummary])
+
     return {
         search,
-        isSearching,
-        hasSearched,
-        isStreamingSmartSummary,
-        isGeneratingSourceDocuments,
+        searchStatus,
         smartSummary,
         sourceDocuments,
     }
