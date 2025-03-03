@@ -3,8 +3,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
 import { ChunkCollection } from '@/app/types'
-import { generateOuterPrompt, generateSourceDocumentPrompt } from '@/app/prompts'
 import { generateSourceDocumentJsonSchema, generateSourceDocumentZodSchema } from './utils'
+import { generateSourceDocumentPrompt } from '@/app/prompts/generateSourceDocumentPrompt'
+import { generateOuterSystemPrompt } from '@/app/prompts/generateOuterSystemPrompt'
 
 const openai = new OpenAI()
 
@@ -16,7 +17,7 @@ export async function POST(req: NextRequest) {
         const response = await openai.chat.completions.create({
             model: 'gpt-4o',
             messages: [
-                {role: 'system', content: generateOuterPrompt()},
+                {role: 'system', content: generateOuterSystemPrompt()},
                 {role: 'user', content: generateSourceDocumentPrompt(query, chunkCollection)}
             ],
             response_format: {type: 'json_object'},

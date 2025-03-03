@@ -3,7 +3,8 @@
 import { NextRequest } from 'next/server'
 import OpenAI from 'openai'
 import { ChunkCollection } from '@/app/types'
-import { generateOuterPrompt, generateSmartSummaryPrompt } from '@/app/prompts'
+import { generateOuterSystemPrompt } from '@/app/prompts/generateOuterSystemPrompt'
+import { generateSmartSummaryPrompt } from '@/app/prompts/generateSmartSummaryPrompt'
 
 const openai = new OpenAI()
 
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest) {
                     const stream = openai.beta.chat.completions.stream({
                         model: 'gpt-4o',
                         messages: [
-                            {role: 'system', content: generateOuterPrompt()},
+                            {role: 'system', content: generateOuterSystemPrompt()},
                             {role: 'user', content: generateSmartSummaryPrompt(query, chunkCollections)},
                         ]
                     })

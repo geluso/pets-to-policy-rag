@@ -3,8 +3,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
 import { SimilarChunk } from '@/app/types'
-import { generateRelevantChunksPrompt, generateOuterPrompt } from '@/app/prompts'
 import { generateRelevantChunksJsonSchema, generateRelevantChunksZodSchema } from './utils'
+import { generateOuterSystemPrompt } from '@/app/prompts/generateOuterSystemPrompt'
+import { generateRelevantChunksPrompt } from '@/app/prompts/generateRelevantChunksPrompt'
 
 const openai = new OpenAI()
 
@@ -23,7 +24,7 @@ export async function POST(req: NextRequest) {
         const response = await openai.chat.completions.create({
             model: 'gpt-4o',
             messages: [
-                {role: 'system', content: generateOuterPrompt()},
+                {role: 'system', content: generateOuterSystemPrompt()},
                 {role: 'user', content: generateRelevantChunksPrompt(query, chunks, RELEVANT_CHUNK_COUNT)},
             ],
             response_format: {type: 'json_object'},
