@@ -9,11 +9,13 @@ const NGROK_URL_BASE = 'https://4cb3-2601-602-8b82-92b0-64d0-4b7b-a51a-85fb.ngro
 const URL_BASE = NGROK_URL_BASE
 const URL_SEARCH = URL_BASE + '/search/'
 
-export async function getChunks(query: string): Promise<SimilarChunk[]> {
+export async function getChunks(query: string, count = 10): Promise<SimilarChunk[]> {
     try {
         const preprocessedQuery = await preprocessQuery(query)
+
+        const url = `${URL_SEARCH}?q=${encodeURIComponent(preprocessedQuery)}&limit=${count}`
         
-        const response = await fetch(URL_SEARCH + '?q=' + encodeURIComponent(preprocessedQuery))
+        const response = await fetch(url)
         
         if (!response.ok) {
             throw new Error(`Failed to fetch chunks: ${response.status} ${response.statusText}`)
@@ -27,7 +29,7 @@ export async function getChunks(query: string): Promise<SimilarChunk[]> {
 
         console.log('CHUNK COUNT', chunksWithScore.length)
 
-        return chunksWithScore.map(({doc}) => doc).reverse()
+        return chunksWithScore.map(({doc}) => doc)
 
     } catch (error) {
         console.error(`GET ${URL_SEARCH}`, error)
