@@ -47,7 +47,7 @@ export default function Admin() {
         <div>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <h2>System Message:</h2>
+                    <h2></h2>
                     <p>Use $query to refer to the user query.</p>
                     <textarea value={systemMessage} onChange={handleSystemMessageChange} rows={8} cols={80} />
                 </div>
