@@ -1,6 +1,6 @@
 {
   "functions": {
-    "api/relevant-chunks/route.js": {
+    "api/relevant-chunks/route.ts": {
       "maxDuration": 30
     }
   }
