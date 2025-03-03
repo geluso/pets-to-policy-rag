@@ -2,19 +2,11 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
-import { ChunkCollection, SourceDocument } from '@/app/types'
-import { generateSourceDocumentPrompt } from '@/app/prompts'
-import { z } from 'zod'
+import { ChunkCollection } from '@/app/types'
+import { generateOuterPrompt, generateSourceDocumentPrompt } from '@/app/prompts'
+import { generateSourceDocumentJsonSchema, generateSourceDocumentZodSchema } from './utils'
 
 const openai = new OpenAI()
-
-const SourceDocumentSchema = z.object({
-    url: z.string(),
-    question: z.string(),
-    citation: z.string(),
-    relevantSubsections: z.string(),
-    relevantLanguage: z.string()
-})
 
 export async function POST(req: NextRequest) {
     try {
@@ -24,24 +16,35 @@ export async function POST(req: NextRequest) {
         const response = await openai.chat.completions.create({
             model: 'gpt-4o',
             messages: [
-                {role: 'system', content: 'You are an AI trained to generate structured JSON responses.'},
+                {role: 'system', content: generateOuterPrompt()},
                 {role: 'user', content: generateSourceDocumentPrompt(query, chunkCollection)}
             ],
             response_format: {type: 'json_object'},
+            tools: [
+                {
+                    type: 'function',
+                    function: {
+                        name: 'generate_source_document',
+                        description: 'Returns a source document',
+                        parameters: generateSourceDocumentJsonSchema(),
+                    },
+                },
+            ],
+            tool_choice: {type: 'function', function: {name: 'generate_source_document'}},
         })
 
-        const textResponse = response.choices[0]?.message?.content
-        if (!textResponse) {
-            throw new Error('Invalid response from OpenAI')
+        const toolCalls = response.choices[0]?.message?.tool_calls
+        if (!toolCalls || toolCalls.length === 0) {
+            throw new Error('OpenAI did not return any tool calls')
         }
 
-        // Validate the response with Zod
-        const parsedResponse: SourceDocument = SourceDocumentSchema.parse(JSON.parse(textResponse))
+        const parsedResponse = JSON.parse(toolCalls[0].function.arguments)
+        const validatedResponse = generateSourceDocumentZodSchema().parse(parsedResponse)
 
-        return NextResponse.json(parsedResponse)
+        return NextResponse.json(validatedResponse)
     } catch (error) {
         console.error('POST /api/source-documents Error:', error)
 
-        return NextResponse.json({error: 'Failed to generate source documents'}, {status: 500})
+        return NextResponse.json({error: 'Failed to generate source document'}, {status: 500})
     }
 }

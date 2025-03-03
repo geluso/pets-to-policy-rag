@@ -25,21 +25,9 @@ export async function getChunks(query: string): Promise<SimilarChunk[]> {
             return []
         }
 
+        console.log('CHUNK COUNT', chunksWithScore.length)
+
         return chunksWithScore.map(({doc}) => doc).reverse()
-
-            // TODO: remove this filter
-            .filter(({url}) => {
-                const isUnsupportedURL = [
-                    'https://statutes.capitol.texas.gov/Docs/LA/htm/LA.302.htm',
-                    'https://statutes.capitol.texas.gov/Docs/LA/htm/LA.408.htm'
-                ].includes(url)
-
-                return !isUnsupportedURL
-            })
-
-            .filter((_, index) => {
-                return index < 2
-            })
 
     } catch (error) {
         console.error(`GET ${URL_SEARCH}`, error)

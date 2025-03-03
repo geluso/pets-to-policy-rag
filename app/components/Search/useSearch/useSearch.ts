@@ -4,6 +4,7 @@ import { useCallback, useState } from 'react'
 import useSmartSummary from './useSmartSummary'
 import useSourceDocuments from './useSourceDocuments'
 import { fetchChunkCollections } from './fetchChunkCollections'
+import { fetchRelevantChunks } from './fetchRelevantChunks'
 
 export default function useSearch(): {
     search: (query: string) => Promise<void>
@@ -25,7 +26,6 @@ export default function useSearch(): {
         setHasSearched(true)
 
         try {
-
             const foundChunks = await getChunks(query)
 
             if (foundChunks.length === 0) {
@@ -34,9 +34,17 @@ export default function useSearch(): {
                 return
             }
 
+            const relevantChunks = await fetchRelevantChunks(query, foundChunks)
+
+            if (relevantChunks.length === 0) {
+                console.warn(`No relevant chunks found for query: ${query}`)
+
+                return
+            }
+
             const chunkCollections = await fetchChunkCollections(foundChunks)
 
-            await generateSmartSummary(query, chunkCollections)
+            generateSmartSummary(query, chunkCollections)
             await generateSourceDocuments(query, chunkCollections)
         } catch(error) {
             console.error('USE SEARCH', error)
