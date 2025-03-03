@@ -12,5 +12,5 @@ export default function SearchStatusLoader({searchStatus}: Props) {
         return null
     }
 
-    return <div>{searchStatus}{ellipsis}</div>
+    return <div className="p-2">{searchStatus}{ellipsis}</div>
 }
