@@ -42,7 +42,7 @@ export default function useSearch(): {
                 return
             }
 
-            const chunkCollections = await fetchChunkCollections(foundChunks)
+            const chunkCollections = await fetchChunkCollections(relevantChunks)
 
             generateSmartSummary(query, chunkCollections)
             await generateSourceDocuments(query, chunkCollections)
