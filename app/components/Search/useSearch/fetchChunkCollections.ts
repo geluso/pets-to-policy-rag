@@ -1,4 +1,5 @@
 import { Chunk, SummaryReadable, ChunkCollection, SimilarChunk } from "@/app/types";
+import toast from "react-hot-toast";
 
 async function fetchSummaryReadable({url}: SimilarChunk): Promise<SummaryReadable | null> {
     try {
@@ -12,6 +13,8 @@ async function fetchSummaryReadable({url}: SimilarChunk): Promise<SummaryReadabl
 
         return data.summary_readable
     } catch (error) {
+        toast.error('Failed to fetch chapter extraction')
+
         console.error('ERROR FETCHING SUMMARY READABLE', error)
 
         return null
@@ -44,6 +47,8 @@ async function fetchAdjacentChunks({url, chunk_index}: SimilarChunk): Promise<Ch
 
         return await response.json()
     } catch (err) {
+        toast.error('Failed to fetch adjacent chunks')
+
         console.error('ERROR FETCHING ADJACENT CHUNKS:', err)
 
         return null

@@ -1,4 +1,5 @@
 import { SimilarChunk } from '@/app/types'
+import toast from 'react-hot-toast'
 
 export async function fetchRelevantChunks(query: string, chunks: SimilarChunk[]): Promise<SimilarChunk[]> {
     try {
@@ -22,6 +23,8 @@ export async function fetchRelevantChunks(query: string, chunks: SimilarChunk[])
 
         return data as SimilarChunk[]
     } catch (error) {
+        toast.error('Failed to generate relevant chunks')
+
         console.error('fetchRelevantChunks error:', error)
 
         return []

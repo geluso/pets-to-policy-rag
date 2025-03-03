@@ -1,29 +1,47 @@
 import { ChunkCollection } from '@/app/types'
+import toast from 'react-hot-toast'
 
 export async function fetchSmartSummaryStreamWithCallback(
     query: string,
     chunkCollections: ChunkCollection[],
     onData: (delta: string) => void,
 ) {
-    const response = await fetch('/api/smart-summaries', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({query, chunkCollections}),
-    })
+    try {
+        const response = await fetch('/api/smart-summaries', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ query, chunkCollections }),
+        })
 
-    if (!response.body) {
-        throw new Error('No response body found')
-    }
+        if (!response.ok) {
+            console.error(`Server error: ${response.status} ${response.statusText}`)
+            return
+        }
 
-    console.log('Streaming started...')
-    const reader = response.body.getReader()
-    const decoder = new TextDecoder()
+        if (!response.body) {
+            console.error('No response body found')
+            return
+        }
 
-    while (true) {
-        const {done, value} = await reader.read()
+        console.log('Streaming started...')
+        const reader = response.body.getReader()
+        const decoder = new TextDecoder()
 
-        if (done) break
+        while (true) {
+            try {
+                const { done, value } = await reader.read()
+                if (done) break
 
-        onData(decoder.decode(value, {stream: true}))
+                onData(decoder.decode(value, {stream: true}))
+            } catch (streamError) {
+                console.error('Error while reading the stream:', streamError)
+
+                break
+            }
+        }
+    } catch (error) {
+        console.error('Error in fetchSmartSummaryStreamWithCallback:', error)
+
+        toast.error('Failed to stream smart summary')
     }
 }

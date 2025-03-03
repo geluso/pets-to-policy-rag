@@ -1,4 +1,5 @@
 import { ChunkCollection, SourceDocument } from '@/app/types'
+import toast from 'react-hot-toast'
 
 export async function fetchSourceDocument(query: string, chunkCollection: ChunkCollection): Promise<SourceDocument | null> {
     try {
@@ -38,7 +39,10 @@ export async function fetchSourceDocuments(query: string, chunkCollections: Chun
             try {
                 return await fetchSourceDocument(query, chunkCollection)
             } catch (error) {
-                console.error(`Skipping failed fetch for chunk: ${chunkCollection.summaryReadable.url}`, error)
+                console.warn(`Skipping failed fetch for chunk: ${chunkCollection.summaryReadable.url}`, error)
+
+                toast.error('Failed to fetch source document')
+
                 return null
             }
         })

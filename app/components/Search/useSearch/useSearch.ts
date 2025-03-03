@@ -5,6 +5,7 @@ import useSmartSummary from './useSmartSummary'
 import useSourceDocuments from './useSourceDocuments'
 import { fetchChunkCollections } from './fetchChunkCollections'
 import { fetchRelevantChunks } from './fetchRelevantChunks'
+import toast from 'react-hot-toast'
 
 export default function useSearch(): {
     search: (query: string) => Promise<void>
@@ -56,6 +57,8 @@ export default function useSearch(): {
             await generateSourceDocuments(query, chunkCollections)
         } catch (error) {
             console.error('USE SEARCH', error)
+
+            toast.error('Search failed')
         } finally {
             setSearchStatus(SearchStatus.DEFAULT)
         }
