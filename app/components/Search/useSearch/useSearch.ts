@@ -30,19 +30,28 @@ export default function useSearch(): {
                 return
             }
 
-            // setSearchStatus(SearchStatus.FILTERING_CHUNKS)
-            // const relevantChunks = await fetchRelevantChunks(query, foundChunks)
+            setSearchStatus(SearchStatus.FILTERING_CHUNKS)
+            const relevantChunks = await fetchRelevantChunks(query, foundChunks)
 
-            // if (relevantChunks.length === 0) {
-            //     console.warn(`No relevant chunks found for query: ${query}`)
-            //     setSearchStatus(SearchStatus.DEFAULT)
-            //     return
-            // }
+            if (relevantChunks.length === 0) {
+                console.warn(`No relevant chunks found for query: ${query}`)
+                setSearchStatus(SearchStatus.DEFAULT)
+                return
+            }
 
-            const chunkCollections = await fetchChunkCollections(foundChunks)
+            const chunkCollections = await fetchChunkCollections(relevantChunks)
 
             setSearchStatus(SearchStatus.GENERATING_SUMMARY)
-            generateSmartSummary(query, chunkCollections)
+            await new Promise<void>((resolve) => {
+                generateSmartSummary(query, chunkCollections)
+                const checkInterval = setInterval(() => {
+                    if (!isInitializingSmartSummary) {
+                        clearInterval(checkInterval)
+                        setSearchStatus(SearchStatus.GENERATING_DOCUMENTS)
+                        resolve()
+                    }
+                }, 100)
+            })
 
             await generateSourceDocuments(query, chunkCollections)
         } catch (error) {
@@ -51,14 +60,6 @@ export default function useSearch(): {
             setSearchStatus(SearchStatus.DEFAULT)
         }
     }, [])
-
-    useEffect(() => {
-        if (isInitializingSmartSummary) {
-            setSearchStatus(SearchStatus.GENERATING_SUMMARY)
-        } else if (smartSummary) {
-            setSearchStatus(SearchStatus.GENERATING_DOCUMENTS)
-        }
-    }, [isInitializingSmartSummary, smartSummary])
 
     return {
         search,
