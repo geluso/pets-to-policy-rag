@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/relevant-chunks/route.js": {
+      "maxDuration": 30
+    }
+  }
+}

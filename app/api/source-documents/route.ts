@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
 
         const toolCalls = response.choices[0]?.message?.tool_calls
         if (!toolCalls || toolCalls.length === 0) {
-            throw new Error('OpenAI did not return any tool calls')
+            throw {code: 'no_tool_calls', error: 'OpenAI did not return any tool calls'}
         }
 
         const parsedResponse = JSON.parse(toolCalls[0].function.arguments)
@@ -45,7 +45,10 @@ export async function POST(req: NextRequest) {
         return NextResponse.json(validatedResponse)
     } catch (error) {
         console.error('POST /api/source-documents Error:', error)
-
-        return NextResponse.json({error: 'Failed to generate source document'}, {status: 500})
+        let code = "error"
+        if (error instanceof Error && 'code' in error) {
+            code = (error as any).code
+        }
+        return NextResponse.json({error: 'Failed to generate source document', code}, {status: 500})
     }
 }

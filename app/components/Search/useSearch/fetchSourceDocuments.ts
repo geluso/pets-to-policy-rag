@@ -1,4 +1,6 @@
+import { errorCodeToMessage, errorFailedFetchingSourceDocs, errorNoToolCalls, errorRateLimitExceeded, errorSourceDocValidationFailed } from '@/app/errors'
 import { ChunkCollection, SourceDocument } from '@/app/types'
+import { errorMiddleware } from '@/app/util'
 import toast from 'react-hot-toast'
 
 export async function fetchSourceDocument(query: string, chunkCollection: ChunkCollection): Promise<SourceDocument | null> {
@@ -10,14 +12,13 @@ export async function fetchSourceDocument(query: string, chunkCollection: ChunkC
         })
 
         if (!response.ok) {
-            const errorText = await response.text()
-            throw new Error(`Failed to fetch source document: ${errorText}`)
+            throw errorFailedFetchingSourceDocs
         }
 
         const data = await response.json()
 
         if (!data.question || !data.citation || !data.relevantSubsections || !data.relevantLanguage) {
-            throw new Error('Invalid response format from API')
+            throw errorSourceDocValidationFailed
         }
 
         return {
@@ -28,8 +29,7 @@ export async function fetchSourceDocument(query: string, chunkCollection: ChunkC
             relevantLanguage: data.relevantLanguage,
         }
     } catch (error) {
-        console.error('Error fetching source document:', error)
-        return null
+        throw error
     }
 }
 
@@ -40,9 +40,8 @@ export async function fetchSourceDocuments(query: string, chunkCollections: Chun
                 return await fetchSourceDocument(query, chunkCollection)
             } catch (error) {
                 console.warn(`Skipping failed fetch for chunk: ${chunkCollection.summaryReadable.url}`, error)
-
-                toast.error('Failed to fetch source document')
-
+                const message = errorCodeToMessage(error)
+                toast.error(message)
                 return null
             }
         })
