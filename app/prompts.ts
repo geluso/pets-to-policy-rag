@@ -223,7 +223,7 @@ Your response **must be in valid JSON** with the following structure:
   "question": "${query}",
   "citation": "[Legal Code Reference, e.g., 'Ga. Code Ann. § 50-18-71']",
   "relevantSubsections": "(a), (b)",
-  "relevantLanguage": "TITLE 50 - STATE GOVERNMENT, CHAPTER 18 - STATE PRINTING AND DOCUMENTS, ARTICLE 4 - INSPECTION OF PUBLIC RECORDS, § 50-18-71. RIGHT OF ACCESS TIMING FEES DENIAL OF REQUESTS IMPACT OF ELECTRONIC RECORDS.\\n(a) All public records shall be open for personal inspection and copying, except {{HIGHLIGHT}}those which by order of a court of this state or by law are specifically exempted from disclosure.{{HIGHLIGHT}} Records shall be maintained by agencies to the extent and in the manner required by Article 5 of this chapter."
+  "relevantLanguage": "TITLE 50 - STATE GOVERNMENT, CHAPTER 18 - STATE PRINTING AND DOCUMENTS, ARTICLE 4 - INSPECTION OF PUBLIC RECORDS, § 50-18-71. RIGHT OF ACCESS; TIMING; FEES; DENIAL OF REQUESTS; IMPACT OF ELECTRONIC RECORDS.\\n(a) All public records shall be open for personal inspection and copying, except {{HIGHLIGHT}}those which by order of a court of this state or by law are specifically exempted from disclosure.{{HIGHLIGHT}} Records shall be maintained by agencies to the extent and in the manner required by Article 5 of this chapter."
 }
 \`\`\`
 
