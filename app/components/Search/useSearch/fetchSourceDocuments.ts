@@ -1,6 +1,5 @@
-import { errorCodeToMessage, errorFailedFetchingSourceDocs, errorNoToolCalls, errorRateLimitExceeded, errorSourceDocValidationFailed } from '@/app/errors'
+import { errorCodeToMessage, errorFailedFetchingSourceDocs, errorSourceDocValidationFailed } from '@/app/errors'
 import { ChunkCollection, SourceDocument } from '@/app/types'
-import { errorMiddleware } from '@/app/util'
 import toast from 'react-hot-toast'
 
 export async function fetchSourceDocument(query: string, chunkCollection: ChunkCollection): Promise<SourceDocument | null> {

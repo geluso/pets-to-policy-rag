@@ -1,6 +1,6 @@
 import { getChunks } from '@/app/lib/rag_server/api'
 import { SearchStatus, SmartSummary, SourceDocument } from '@/app/types'
-import { useCallback, useState, useEffect } from 'react'
+import { useCallback, useState } from 'react'
 import useSmartSummary from './useSmartSummary'
 import useSourceDocuments from './useSourceDocuments'
 import { fetchChunkCollections } from './fetchChunkCollections'

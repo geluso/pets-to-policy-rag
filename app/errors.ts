@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const errorUnknown = { code: 'unknown', message: "Something went wrong." }
 export const errorFailedFetchingSourceDocs = { code: 'failed_fetching_source_docs', message: 'Failed to fetch source documents' }
 export const errorRateLimitExceeded = { code: 'rate_limit_exceeded', message: "OpenAI rate limit reached. Wait one minute and try again." }
@@ -18,6 +19,7 @@ export function errorCodeToMessage(error: any) {
   try {
     return errorCodeToMessageLookup[error.code]
   } catch (e) {
+    console.warn('errorCodeToMessage unexpected error:', e)
     return errorUnknown.message
   }
 }
