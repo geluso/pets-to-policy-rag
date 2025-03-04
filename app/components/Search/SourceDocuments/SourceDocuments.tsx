@@ -22,6 +22,7 @@ export default function SourceDocuments({sourceDocuments}: Props) {
                                 <div>Citation: {citation}</div>
                                 <div>Question: {question}</div>
                                 <div>Relevant Subsections: {relevantSubsections}</div>
+                                <div>Date Ingested: 2025-03-03</div>
                             </div>
                             <div>
                                 {parseRelevantLanguage(relevantLanguage).map(({text, isImportant}, spanIndex) => (
