@@ -9,7 +9,7 @@ const NGROK_URL_BASE = 'https://4cb3-2601-602-8b82-92b0-64d0-4b7b-a51a-85fb.ngro
 const URL_BASE = NGROK_URL_BASE
 const URL_SEARCH = URL_BASE + '/search/'
 
-export async function getChunks(query: string, count = 10): Promise<SimilarChunk[]> {
+export async function getChunks(query: string, count = 3): Promise<SimilarChunk[]> {
     try {
         const preprocessedQuery = await preprocessQuery(query)
 

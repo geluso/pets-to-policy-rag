@@ -18,12 +18,11 @@ export default function useSearch(): {
     const {sourceDocuments, resetSourceDocuments, generateSourceDocuments} = useSourceDocuments()
 
     const search = useCallback(async (query: string) => {
-
         try {
             resetSmartSummary()
             resetSourceDocuments()
             setSearchStatus(SearchStatus.FINDING_CHUNKS)
-            const foundChunks = await getChunks(query)
+            const foundChunks = await getChunks(query, 3)
 
             if (foundChunks.length === 0) {
                 console.warn(`No chunks found for query: ${query}`)
@@ -43,6 +42,7 @@ export default function useSearch(): {
             const chunkCollections = await fetchChunkCollections(relevantChunks)
 
             setSearchStatus(SearchStatus.GENERATING_SUMMARY)
+            
             await new Promise<void>((resolve) => {
                 generateSmartSummary(query, chunkCollections)
                 const checkInterval = setInterval(() => {
