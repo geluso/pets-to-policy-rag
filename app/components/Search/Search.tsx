@@ -27,10 +27,15 @@ export default function Search({codeDomain}: Props) {
 
     return (
         <div className="bg-gray-300 flex flex-col w-full h-full items-center">
-            <Header />
+            <Header codeDomain={codeDomain} />
             <div className="flex h-full w-4/5 max-w-[1000px] bg-white border-t-0 border-b-0 border-x-1 border-solid border-black overflow-auto">
                 <div className="w-full flex flex-col justify-between">
                     <div className="p-2 flex flex-col gap-5">
+                        <div>
+                            <a href="/">Texas Labor Code</a>
+                            {' '}| {' '}
+                            <a href="/education">Texas Education Code</a>
+                        </div>
                         <SearchInput handleSubmit={search} searchStatus={searchStatus} codeDomain={codeDomain} />
                         {hasFinishedGenerating ? (
                             <button onClick={() => generatePDF()} className="bg-blue-500 text-white">Download PDF</button>
