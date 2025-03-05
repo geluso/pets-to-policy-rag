@@ -10,7 +10,7 @@ export const LEGAL_ONTOLOGY = {
     purposeDescriptors: ['required by law', 'permitted under rule', 'regulated by statute'],
 }
 
-export const generateOuterSystemPrompt = (codeDomain: CodeDomain) => `
+export const generateOuterSystemPrompt = (codeDomain = CodeDomain.LABOR) => `
 # OUTER SYSTEM PROMPT
 
 ## INSTRUCTIONS:
