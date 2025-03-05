@@ -3,9 +3,9 @@
 import UneditablePrompt from "@/app/components/UneditablePrompt";
 import { generateOuterSystemPrompt } from "@/app/prompts/generateOuterSystemPrompt";
 import { generateQueryPrompt } from "@/app/prompts/generateQueryPrompt";
-import { generateRelevantChunksPrompt } from "@/app/prompts/generateRelevantChunksPrompt";
 import { generateSmartSummaryPrompt } from "@/app/prompts/generateSmartSummaryPrompt";
 import { generateSourceDocumentPrompt } from "@/app/prompts/generateSourceDocumentPrompt";
+import { CodeDomain } from "@/app/types";
 
 export interface Chunk {
   id: number
@@ -32,6 +32,7 @@ export interface SimilarChunk {
 
 
 export default function AdminPrompts() {
+  const exampleDomain = CodeDomain.LABOR
   const exampleQuery = "EXAMPLE USER QUERY"
 
   const exampleSummaryReadable: SummaryReadable = {
@@ -48,19 +49,21 @@ export default function AdminPrompts() {
     ]
   }]
 
-  const exampleSimilarChunks: SimilarChunk[] = [
-    {url: "EXAMPLE", text: "EXAMPLE", chunk_index: 4},
-    {url: "EXAMPLE", text: "EXAMPLE", chunk_index: 4},
-    {url: "EXAMPLE", text: "EXAMPLE", chunk_index: 4},
-    {url: "EXAMPLE", text: "EXAMPLE", chunk_index: 4}
-  ]
+  const exampleSourceDocuments = [{
+      url: "EXAMPLE URL",
+      question: "EXAMPLE QUESTION",
+      citation: "EXAMPLE CITATION",
+      relevantKeywords: "EXAMPLE RELEVANT KEYWORDS",
+      relevantSubsections: "EXAMPLE RELEVANT SUBSECTOINS",
+      relevantLanguage: "EXAMPLE RELEVANT LANGUAGE"
+  }]
 
   return <div>
     <h1>Admin Prompts</h1>
 
     <h2>Outer System Prompt</h2>
     <p>This prompt defines concepts available to all other prompts. It establishes a common ontology and context.</p>
-    <UneditablePrompt text={generateOuterSystemPrompt()} />
+    <UneditablePrompt text={generateOuterSystemPrompt(exampleDomain)} />
 
     <h2>Query Restructuring Prompt</h2>
     <p>
@@ -71,9 +74,6 @@ export default function AdminPrompts() {
     </p>
     <UneditablePrompt text={generateQueryPrompt(exampleQuery)} />
 
-    <h2>Relevant Chunks Prompt</h2>
-    <UneditablePrompt text={generateRelevantChunksPrompt(exampleQuery, exampleSimilarChunks, 2)} />
-
     <h2>Smart Summary Prompt</h2>
     <p>
       Smart Summaries are a way for us to collect and store information for
@@ -83,13 +83,13 @@ export default function AdminPrompts() {
       summary in order to provide additional information in the Smart Summary to
       answer a user's query.
     </p>
-    <UneditablePrompt text={generateSmartSummaryPrompt(exampleQuery, exampleChunkCollection)} />
+    <UneditablePrompt text={generateSmartSummaryPrompt(exampleDomain, exampleQuery, exampleSourceDocuments)} />
 
     <h2>Source Document Prompt</h2>
     <p>
       This prompt takes in chunk matches and a summary readable and extracts
       and highlights important information relevant to the user's query.
     </p>
-    <UneditablePrompt text={generateSourceDocumentPrompt(exampleQuery, exampleChunkCollection[0])} />
+    <UneditablePrompt text={generateSourceDocumentPrompt(exampleDomain, exampleQuery, exampleChunkCollection[0])} />
   </div>
 }
