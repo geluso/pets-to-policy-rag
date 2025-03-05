@@ -9,6 +9,7 @@ import SearchStatusLoader from './SearchStatusLoader/SearchStatusLoader'
 import { CodeDomain, SearchStatus } from '@/app/types'
 import { useRef } from 'react'
 import { useReactToPrint } from 'react-to-print'
+import Link from 'next/link'
 
 interface Props {
     codeDomain: CodeDomain
@@ -32,9 +33,9 @@ export default function Search({codeDomain}: Props) {
                 <div className="w-full flex flex-col justify-between">
                     <div className="p-2 flex flex-col gap-5">
                         <div>
-                            <a href="/">Texas Labor Code</a>
+                            <Link href="/">Texas Labor Code</Link>
                             {' '}| {' '}
-                            <a href="/education">Texas Education Code</a>
+                            <Link href="/education">Texas Education Code</Link>
                         </div>
                         <SearchInput handleSubmit={search} searchStatus={searchStatus} codeDomain={codeDomain} />
                         {hasFinishedGenerating ? (
