@@ -45,8 +45,6 @@ export async function GET(req: NextRequest) {
             orderBy: {chunk_index: 'asc'}
         })
 
-        console.log('ADJACENT CHUNKS', adjacentChunks)
-
         return NextResponse.json(adjacentChunks, {status: 200})
     } catch (error) {
         console.error('GET /api/indexed-chunks', error)

@@ -1,16 +1,16 @@
-import { ChunkCollection } from '@/app/types'
+import { SourceDocument } from '@/app/types'
 import toast from 'react-hot-toast'
 
 export async function fetchSmartSummaryStreamWithCallback(
     query: string,
-    chunkCollections: ChunkCollection[],
+    sourceDocuments: SourceDocument[],
     onData: (delta: string) => void,
 ) {
     try {
         const response = await fetch('/api/smart-summaries', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ query, chunkCollections }),
+            body: JSON.stringify({query, sourceDocuments}),
         })
 
         if (!response.ok) {

@@ -4,7 +4,6 @@ import { useCallback, useState } from 'react'
 import useSmartSummary from './useSmartSummary'
 import useSourceDocuments from './useSourceDocuments'
 import { fetchChunkCollections } from './fetchChunkCollections'
-import { fetchRelevantChunks } from './fetchRelevantChunks'
 import toast from 'react-hot-toast'
 
 export default function useSearch(): {
@@ -14,7 +13,7 @@ export default function useSearch(): {
     sourceDocuments: SourceDocument[]
 } {
     const [searchStatus, setSearchStatus] = useState<SearchStatus>(SearchStatus.DEFAULT)
-    const {smartSummary, resetSmartSummary, generateSmartSummary, isInitializingSmartSummary} = useSmartSummary()
+    const {smartSummary, resetSmartSummary, generateSmartSummary} = useSmartSummary()
     const {sourceDocuments, resetSourceDocuments, generateSourceDocuments} = useSourceDocuments()
 
     const search = useCallback(async (query: string) => {
@@ -30,31 +29,13 @@ export default function useSearch(): {
                 return
             }
 
-            setSearchStatus(SearchStatus.FILTERING_CHUNKS)
-            const relevantChunks = await fetchRelevantChunks(query, foundChunks)
+            const chunkCollections = await fetchChunkCollections(foundChunks)
 
-            if (relevantChunks.length === 0) {
-                console.warn(`No relevant chunks found for query: ${query}`)
-                setSearchStatus(SearchStatus.DEFAULT)
-                return
-            }
-
-            const chunkCollections = await fetchChunkCollections(relevantChunks)
+            setSearchStatus(SearchStatus.GENERATING_DOCUMENTS)
+            await generateSourceDocuments(query, chunkCollections)
 
             setSearchStatus(SearchStatus.GENERATING_SUMMARY)
-            
-            await new Promise<void>((resolve) => {
-                generateSmartSummary(query, chunkCollections)
-                const checkInterval = setInterval(() => {
-                    if (!isInitializingSmartSummary) {
-                        clearInterval(checkInterval)
-                        setSearchStatus(SearchStatus.GENERATING_DOCUMENTS)
-                        resolve()
-                    }
-                }, 100)
-            })
-
-            await generateSourceDocuments(query, chunkCollections)
+            await generateSmartSummary(query, sourceDocuments)
         } catch (error) {
             console.error('USE SEARCH', error)
 

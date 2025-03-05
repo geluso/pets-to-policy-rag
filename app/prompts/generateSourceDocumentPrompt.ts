@@ -1,4 +1,5 @@
 import { ChunkCollection } from '../types'
+import { LEGAL_ONTOLOGY } from './generateOuterSystemPrompt';
 
 export const generateSourceDocumentPrompt = (query: string, chunkCollection: ChunkCollection) => {
     const chunkBlock = JSON.stringify(chunkCollection, null, 2);
@@ -11,11 +12,10 @@ You are a legal assistant tasked with **extracting and structuring relevant lega
 Your response **must be structured JSON** that conforms to the schema below.
 
 ### CONTEXT:
-- **The user query must remain unchanged in the response.**
 - **The provided chunks are in order and form a continuous legal text** (where one chunk ends, the next begins).  
 - **Your goal is to hone in on a single section** within the provided chunks that best answers the query.  
-- **The most relevant section should be extracted as a whole,** along with the correct legal citation.
-- **The \`url\` from the \`ChunkCollection\` must be included in the response. Do not modify it.**
+- **The most relevant section should be extracted as a whole,** along with the correct legal citation and relevant keywords.
+- **If exact matching is poor, make an informed selection of the most applicable legal content available.**  
 
 ---
 
@@ -26,8 +26,18 @@ Use this data to:
 2. **Determine the correct legal citation** using:
    - The **specific section/subsection** from the chunk.
    - The **full citation context** from the Summary Readable.
-3. **Extract and highlight** only the **most critical legal phrases** relevant to the user query using \`{{HIGHLIGHT}}\`.
-4. **Preserve the original \`url\` associated with the chunk collection.** 
+3. **Extract and highlight entire sentences or phrases** that capture the most relevant legal context—not just isolated keywords.
+4. **Populate the "relevantKeywords" field** using legal terminology extracted from the retrieved text that aligns with the predefined ontology.
+
+### LEGAL ONTOLOGY REFERENCE:
+Use the following legal terminology when populating the \`relevantKeywords\` field **if they appear in the extracted legal text**:
+- **Confidentiality Terms:** {${LEGAL_ONTOLOGY.confidentialityTerms.join(', ')}}
+- **Entities:** {${LEGAL_ONTOLOGY.entities.join(', ')}}
+- **Authority Descriptors:** {${LEGAL_ONTOLOGY.authorityDescriptors.join(', ')}}
+- **Process Terms:** {${LEGAL_ONTOLOGY.processTerms.join(', ')}}
+- **Data Types:** {${LEGAL_ONTOLOGY.dataTypes.join(', ')}}
+- **Parties:** {${LEGAL_ONTOLOGY.parties.join(', ')}}
+- **Purpose Descriptors:** {${LEGAL_ONTOLOGY.purposeDescriptors.join(', ')}}
 
 \`\`\`json
 ${chunkBlock}
@@ -36,11 +46,11 @@ ${chunkBlock}
 ---
 
 ## **STANDARDIZATION REQUIREMENTS**
-- **All extracted text must use legally precise terminology** (see legal ontology).  
 - **Citations must follow the proper format** (e.g., **Code, Chapter, Section, Subsection**).  
-- **Only highlight phrases that are directly relevant to answering the user query.**  
+- **Highlight full sentences or key legal phrases** that best provide context to the user query using \`{{HIGHLIGHT}}\`.  
+- **Ensure "relevantKeywords" is populated** using terms extracted from the retrieved text that align with the legal ontology.  
 - **Responses must be JSON only—no additional explanations.**  
-- **The original \`url\` from the \`ChunkCollection\` must be preserved exactly as provided.**  
+- **Relevant subsections must only include subsections containing highlighted critical legal text relevant to the user query.**  
 
 ---
 
@@ -49,26 +59,17 @@ Your response **must be in valid JSON** with the following structure:
 
 \`\`\`json
 {
-  "url": "${chunkCollection.summaryReadable.url}",
-  "question": "${query}",
   "citation": "Ga. Code Ann. § 50-18-71",
-  "relevantSubsections": "(a), (b)",
-  "relevantLanguage": "TITLE 50 - STATE GOVERNMENT, CHAPTER 18 - STATE PRINTING AND DOCUMENTS, ARTICLE 4 - INSPECTION OF PUBLIC RECORDS, § 50-18-71. RIGHT OF ACCESS; TIMING; FEES; DENIAL OF REQUESTS; IMPACT OF ELECTRONIC RECORDS.\\n(a) All public records shall be open for personal inspection and copying, except {{HIGHLIGHT}}those which by order of a court of this state or by law are specifically exempted from disclosure.{{HIGHLIGHT}} Records shall be maintained by agencies to the extent and in the manner required by Article 5 of this chapter."
+  "relevantSubsections": "(b)",
+  "relevantKeywords": "confidential, privileged, disclosure, regulatory body, legal authority",
+  "relevantLanguage": "Labor Code, Chapter 21, Section 21.403. CONFIDENTIALITY OF GENETIC INFORMATION. (a) Except as provided by Section 21.4031, genetic information is {{HIGHLIGHT}}confidential and privileged{{HIGHLIGHT}} regardless of the source of the information. (b) A person who holds genetic information about an individual {{HIGHLIGHT}}may not disclose{{HIGHLIGHT}} or be compelled to disclose, by subpoena or otherwise, that information unless the disclosure is specifically authorized as provided by Section 21.4032."
 }
 \`\`\`
 
 ---
 
-### **IMPORTANT INSTRUCTIONS**
-- **The user query must remain unchanged in the response.**
-- **The chunks are continuous and contain ordered legal text.**
-- **You must select and extract only one section that best answers the query.**
-- **Do not return multiple sections—identify the most relevant one.**
-- **Use legal terminology consistent with the ontology defined in the system prompt.**
-- **Only return JSON—do not include any additional text.**
-- **Ensure proper legal citation structure.**
-- **Use \`{{HIGHLIGHT}}\` only for critical legal phrases that are directly relevant to the user query.**
-- **Preserve the \`url\` exactly as provided in the input JSON.**
+## **USER QUERY**
+"${query}"
 
 ---
     `

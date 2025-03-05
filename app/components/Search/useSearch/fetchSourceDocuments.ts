@@ -24,6 +24,7 @@ export async function fetchSourceDocument(query: string, chunkCollection: ChunkC
             url: data.url,
             question: data.question,
             citation: data.citation,
+            relevantKeywords: data.relevantKeywords,
             relevantSubsections: data.relevantSubsections,
             relevantLanguage: data.relevantLanguage,
         }

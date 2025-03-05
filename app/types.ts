@@ -27,6 +27,7 @@ export interface SourceDocument {
     url: string
     question: string
     citation: string
+    relevantKeywords: string
     relevantSubsections: string
     relevantLanguage: string
 }

@@ -44,7 +44,11 @@ export async function POST(req: NextRequest) {
         const parsedResponse = JSON.parse(toolCalls[0].function.arguments)
         const validatedResponse = generateSourceDocumentZodSchema().parse(parsedResponse)
 
-        return NextResponse.json(validatedResponse)
+        console.log(validatedResponse)
+
+        const hydratedResponse = {...validatedResponse, url: chunkCollection.summaryReadable.url, question: query}
+
+        return NextResponse.json(hydratedResponse)
     } catch (error) {
         console.error('POST /api/source-documents Error:', error)
         let code = "error"

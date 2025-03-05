@@ -1,27 +1,20 @@
-import { ChunkCollection, SmartSummary } from '@/app/types'
+import { SmartSummary, SourceDocument } from '@/app/types'
 import { useCallback, useState } from 'react'
 import { fetchSmartSummaryStreamWithCallback } from './fetchSmartSummaryStreamWithCallback'
 
 export default function useSmartSummary(): {
     smartSummary: SmartSummary
     resetSmartSummary: () => void
-    generateSmartSummary: (query: string, chunkCollections: ChunkCollection[]) => Promise<void>
-    isInitializingSmartSummary: boolean
+    generateSmartSummary: (query: string, sourceDocuments: SourceDocument[]) => Promise<void>
 } {
     const [smartSummary, setSmartSummary] = useState<SmartSummary>('')
-    const [isInitializingSmartSummary, setIsInitializingSmartSummary] = useState<boolean>(false)
 
-    const generateSmartSummary = useCallback(async (query: string, chunkCollections: ChunkCollection[]) => {
-        setIsInitializingSmartSummary(true)
-
+    const generateSmartSummary = useCallback(async (query: string, sourceDocuments: SourceDocument[]) => {
         try {
             await fetchSmartSummaryStreamWithCallback(
                 query,
-                chunkCollections,
-                (delta) => {
-                    setSmartSummary((prev) => prev + delta)
-                    setIsInitializingSmartSummary(false)
-                },
+                sourceDocuments,
+                (delta) => setSmartSummary((prev) => prev + delta),
             )
         } catch (error) {
             console.error('USE SMART SUMMARY', error)
@@ -36,6 +29,5 @@ export default function useSmartSummary(): {
         smartSummary,
         resetSmartSummary,
         generateSmartSummary,
-        isInitializingSmartSummary,
     }
 }

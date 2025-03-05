@@ -27,7 +27,7 @@ export async function getChunks(query: string, count = 3): Promise<SimilarChunk[
             return []
         }
 
-        console.log('CHUNK COUNT', chunksWithScore.length)
+        console.log('CHUNKS WITH SCORE', chunksWithScore)
 
         return chunksWithScore.map(({doc}) => doc)
 
