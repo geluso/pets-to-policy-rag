@@ -1,4 +1,4 @@
-import { CodeDomain } from '@/app/types'
+import { CodeDomain } from '@/app/constants/types'
 import { ChangeEvent, KeyboardEvent } from 'react'
 
 interface Props {

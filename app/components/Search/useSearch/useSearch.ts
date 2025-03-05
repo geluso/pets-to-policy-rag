@@ -1,5 +1,5 @@
 import { getChunks } from '@/app/lib/rag_server/api'
-import { CodeDomain, SearchStatus, SmartSummary, SourceDocument } from '@/app/types'
+import { CodeDomain, SearchStatus, SmartSummary, SourceDocument } from '@/app/constants/types'
 import { useCallback, useState } from 'react'
 import useSmartSummary from './useSmartSummary'
 import useSourceDocuments from './useSourceDocuments'

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import TextArea from './TextArea'
-import { CodeDomain, SearchStatus } from '@/app/types'
+import { CodeDomain, SearchStatus } from '@/app/constants/types'
 
 interface Props {
     handleSubmit: (inputValue: string) => void

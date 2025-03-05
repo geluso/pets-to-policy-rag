@@ -1,5 +1,5 @@
 import { errorCodeToMessage, errorFailedFetchingSourceDocs, errorSourceDocValidationFailed } from '@/app/errors'
-import { ChunkCollection, CodeDomain, SourceDocument } from '@/app/types'
+import { ChunkCollection, CodeDomain, SourceDocument } from '@/app/constants/types'
 import toast from 'react-hot-toast'
 
 export async function fetchSourceDocument(

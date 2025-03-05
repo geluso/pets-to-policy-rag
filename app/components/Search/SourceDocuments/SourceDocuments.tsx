@@ -1,4 +1,4 @@
-import { SourceDocument } from '@/app/types'
+import { SourceDocument } from '@/app/constants/types'
 import { parseRelevantLanguage } from './parseRelevantLanguage'
 
 interface Props {

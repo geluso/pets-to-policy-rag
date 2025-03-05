@@ -1,6 +1,6 @@
 "use client"
 
-import { CodeDomain } from "@/app/types"
+import { CodeDomain } from "@/app/constants/types"
 
 export default function Header({ codeDomain }: { codeDomain: CodeDomain }) {
     let codeDomainDescription = "Texas Labor Code"

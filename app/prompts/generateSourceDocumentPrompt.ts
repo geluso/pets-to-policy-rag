@@ -1,4 +1,4 @@
-import { ChunkCollection, CodeDomain } from '../types'
+import { ChunkCollection, CodeDomain } from '../constants/types'
 import { LEGAL_ONTOLOGY } from './generateOuterSystemPrompt';
 
 export const generateSourceDocumentPrompt = (codeDomain: CodeDomain, query: string, chunkCollection: ChunkCollection) => {

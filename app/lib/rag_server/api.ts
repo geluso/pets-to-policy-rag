@@ -1,6 +1,6 @@
 'use server'
 
-import { CodeDomain, SimilarChunk } from '@/app/types'
+import { CodeDomain, SimilarChunk } from '@/app/constants/types'
 import { preprocessQuery } from './preprocessQuery'
 
 // const LOCAL_URL_BASE = 'http://localhost:8080'

@@ -2,7 +2,7 @@
 
 import { NextRequest } from 'next/server'
 import OpenAI from 'openai'
-import { CodeDomain, SourceDocument } from '@/app/types'
+import { CodeDomain, SourceDocument } from '@/app/constants/types'
 import { generateOuterSystemPrompt } from '@/app/prompts/generateOuterSystemPrompt'
 import { generateSmartSummaryPrompt } from '@/app/prompts/generateSmartSummaryPrompt'
 

@@ -5,7 +5,7 @@ import { generateOuterSystemPrompt } from "@/app/prompts/generateOuterSystemProm
 import { generateQueryPrompt } from "@/app/prompts/generateQueryPrompt";
 import { generateSmartSummaryPrompt } from "@/app/prompts/generateSmartSummaryPrompt";
 import { generateSourceDocumentPrompt } from "@/app/prompts/generateSourceDocumentPrompt";
-import { CodeDomain } from "@/app/types";
+import { CodeDomain } from "@/app/constants/types";
 
 export interface Chunk {
   id: number

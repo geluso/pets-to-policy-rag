@@ -1,4 +1,4 @@
-import { CodeDomain, SmartSummary, SourceDocument } from '@/app/types'
+import { CodeDomain, SmartSummary, SourceDocument } from '@/app/constants/types'
 import { useCallback, useState } from 'react'
 import { fetchSmartSummaryStreamWithCallback } from './fetchSmartSummaryStreamWithCallback'
 
