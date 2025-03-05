@@ -1,7 +1,7 @@
 'use server'
 
-import { generateOuterSystemPrompt } from '@/app/prompts/generateOuterSystemPrompt'
-import { generateQueryPrompt } from '@/app/prompts/generateQueryPrompt'
+import { generateOuterSystemPrompt } from '@/app/constants/prompts/generateOuterSystemPrompt'
+import { generateQueryPrompt } from '@/app/constants/prompts/generateQueryPrompt'
 import OpenAI from 'openai'
 
 const openai = new OpenAI()

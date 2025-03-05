@@ -3,8 +3,8 @@
 import { NextRequest } from 'next/server'
 import OpenAI from 'openai'
 import { CodeDomain, SourceDocument } from '@/app/constants/types'
-import { generateOuterSystemPrompt } from '@/app/prompts/generateOuterSystemPrompt'
-import { generateSmartSummaryPrompt } from '@/app/prompts/generateSmartSummaryPrompt'
+import { generateOuterSystemPrompt } from '@/app/constants/prompts/generateOuterSystemPrompt'
+import { generateSmartSummaryPrompt } from '@/app/constants/prompts/generateSmartSummaryPrompt'
 
 const openai = new OpenAI()
 

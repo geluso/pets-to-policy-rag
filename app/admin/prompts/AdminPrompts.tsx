@@ -1,10 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
 
 import UneditablePrompt from "@/app/components/UneditablePrompt";
-import { generateOuterSystemPrompt } from "@/app/prompts/generateOuterSystemPrompt";
-import { generateQueryPrompt } from "@/app/prompts/generateQueryPrompt";
-import { generateSmartSummaryPrompt } from "@/app/prompts/generateSmartSummaryPrompt";
-import { generateSourceDocumentPrompt } from "@/app/prompts/generateSourceDocumentPrompt";
+import { generateOuterSystemPrompt } from "@/app/constants/prompts/generateOuterSystemPrompt";
+import { generateQueryPrompt } from "@/app/constants/prompts/generateQueryPrompt";
+import { generateSmartSummaryPrompt } from "@/app/constants/prompts/generateSmartSummaryPrompt";
+import { generateSourceDocumentPrompt } from "@/app/constants/prompts/generateSourceDocumentPrompt";
 import { CodeDomain } from "@/app/constants/types";
 
 export interface Chunk {
