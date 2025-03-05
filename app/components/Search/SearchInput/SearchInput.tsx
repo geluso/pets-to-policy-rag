@@ -12,7 +12,6 @@ export default function SearchInput({handleSubmit, searchStatus, codeDomain}: Pr
     const [inputValue, setInputValue] = useState('')
     const isSearching = [
         SearchStatus.FINDING_CHUNKS,
-        SearchStatus.FILTERING_CHUNKS,
         SearchStatus.GENERATING_SUMMARY,
         SearchStatus.GENERATING_DOCUMENTS,
     ].includes(searchStatus)
