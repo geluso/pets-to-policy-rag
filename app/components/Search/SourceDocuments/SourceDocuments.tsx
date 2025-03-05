@@ -12,17 +12,16 @@ export default function SourceDocuments({sourceDocuments}: Props) {
 
     return (
         <div className="flex flex-col gap-3">
-            <h3 className="m-0">📎 Relevant Info</h3>
+            <h3 className="m-0">📎 Relevant Citations</h3>
             <div className="flex flex-col gap-2">
                 {sourceDocuments.map(({question, citation, relevantSubsections, relevantLanguage, url}, sourceIndex) => (
                     <div key={`source-document-${sourceIndex}`} className="border-solid border-black p-1 flex flex-col gap-2">
-                        <h4 className="m-0">📄 Source Document</h4>
                         <div className="flex flex-col gap-2">
                             <div>
-                                <div>Citation: {citation}</div>
-                                <div>Question: {question}</div>
-                                <div>Relevant Subsections: {relevantSubsections}</div>
-                                <div>Date Ingested: 2025-03-03</div>
+                                <div><b>Citation:</b> {citation}</div>
+                                <div><b>Question:</b> {question}</div>
+                                <div><b>Relevant Subsections:</b> {relevantSubsections}</div>
+                                <div><b>Date Ingested:</b> 2025-03-03</div>
                             </div>
                             <div>
                                 {parseRelevantLanguage(relevantLanguage).map(({text, isImportant}, spanIndex) => (
