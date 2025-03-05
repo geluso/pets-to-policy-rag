@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
 
         const parsedResponse = JSON.parse(toolCalls[0].function.arguments)
         const validatedResponse = generateSourceDocumentZodSchema().parse(parsedResponse)
-        const hydratedResponse = {...validatedResponse, url: chunkCollection.summaryReadable.url, question: query}
+        const hydratedResponse = {...validatedResponse, url: chunkCollection.chunks[0].url, question: query}
 
         return NextResponse.json(hydratedResponse)
     } catch (error) {
