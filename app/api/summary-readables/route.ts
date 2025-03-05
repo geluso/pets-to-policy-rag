@@ -29,7 +29,15 @@ export async function GET(req: NextRequest) {
         const summaryReadable = await prisma.summary_readable.findFirst({where: {url}})
 
         if (!summaryReadable) {
-            return NextResponse.json({error: 'No summary found for this URL'}, {status: 404})
+            // Return a blank string if there's no summary readable at all.
+            // This makes the system more robust? It is OK if the summary readable doesn't exist.
+            // Summary readables are meant to provide extra additional information.
+            console.warn({error: 'No summary found for this URL'})
+            return NextResponse.json({
+                url,
+                summary_readable: '',
+                id: Math.random()
+            })
         }
 
         return NextResponse.json(summaryReadable, {status: 200})

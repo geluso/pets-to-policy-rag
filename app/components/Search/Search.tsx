@@ -33,9 +33,11 @@ export default function Search({codeDomain}: Props) {
                 <div className="w-full flex flex-col justify-between">
                     <div className="p-2 flex flex-col gap-5">
                         <div>
-                            <Link href="/">Texas Labor Code</Link>
+                            <Link href="/texas-labor">Texas Labor Code</Link>
                             {' '}| {' '}
-                            <Link href="/education">Texas Education Code</Link>
+                            <Link href="/texas-education">Texas Education Code</Link>
+                            {' '}| {' '}
+                            <Link href="/south-carolina-labor">South Carolina Labor Code</Link>
                         </div>
                         <SearchInput handleSubmit={search} searchStatus={searchStatus} codeDomain={codeDomain} />
                         {hasFinishedGenerating ? (

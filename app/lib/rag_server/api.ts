@@ -17,6 +17,8 @@ export async function getChunks(codeDomain: CodeDomain, query: string, count = 3
 
         if (codeDomain === CodeDomain.EDUCATION) {
             url = url + '&dataset=tx-education'
+        } else if (codeDomain === CodeDomain.SOUTH_CAROLINA_LABOR) {
+            url = url + '&dataset=sc-labor'
         }
 
         const response = await fetch(url)
