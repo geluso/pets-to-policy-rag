@@ -1,4 +1,4 @@
-import { CodeDomain } from "../constants/types"
+import { CodeDomain } from "../types"
 
 export const LEGAL_ONTOLOGY = {
     confidentialityTerms: ['private', 'classified', 'restricted', 'secure', 'sensitive', 'non-public', 'confidential', 'protected', 'privileged', 'controlled', 'for staff use only', 'official use only', 'personally identifiable'],
