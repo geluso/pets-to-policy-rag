@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 'use server'
 
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
-import { ChunkCollection } from '@/app/types'
+import { ChunkCollection, CodeDomain } from '@/app/types'
 import { generateSourceDocumentJsonSchema, generateSourceDocumentZodSchema } from './utils'
 import { generateSourceDocumentPrompt } from '@/app/prompts/generateSourceDocumentPrompt'
 import { generateOuterSystemPrompt } from '@/app/prompts/generateOuterSystemPrompt'
@@ -15,12 +13,13 @@ export async function POST(req: NextRequest) {
     try {
         const json = await req.json()
         const query: string = json.query
+        const codeDomain: CodeDomain = json.codeDomain
         const chunkCollection: ChunkCollection = json.chunkCollection
         const response = await openai.chat.completions.create({
             model: 'gpt-4o',
             messages: [
-                {role: 'system', content: generateOuterSystemPrompt()},
-                {role: 'user', content: generateSourceDocumentPrompt(query, chunkCollection)}
+                {role: 'system', content: generateOuterSystemPrompt(codeDomain)},
+                {role: 'user', content: generateSourceDocumentPrompt(codeDomain, query, chunkCollection)}
             ],
             response_format: {type: 'json_object'},
             tools: [
@@ -43,9 +42,6 @@ export async function POST(req: NextRequest) {
 
         const parsedResponse = JSON.parse(toolCalls[0].function.arguments)
         const validatedResponse = generateSourceDocumentZodSchema().parse(parsedResponse)
-
-        console.log(validatedResponse)
-
         const hydratedResponse = {...validatedResponse, url: chunkCollection.summaryReadable.url, question: query}
 
         return NextResponse.json(hydratedResponse)

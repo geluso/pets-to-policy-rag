@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import TextArea from './TextArea'
-import { SearchStatus } from '@/app/types'
+import { CodeDomain, SearchStatus } from '@/app/types'
 
 interface Props {
     handleSubmit: (inputValue: string) => void
     searchStatus: SearchStatus
+    codeDomain: CodeDomain
 }
 
-export default function SearchInput({handleSubmit, searchStatus}: Props) {
+export default function SearchInput({handleSubmit, searchStatus, codeDomain}: Props) {
     const [inputValue, setInputValue] = useState('')
     const isSearching = [
         SearchStatus.FINDING_CHUNKS,
@@ -27,6 +28,7 @@ export default function SearchInput({handleSubmit, searchStatus}: Props) {
                 setInputValue={setInputValue}
                 onSubmit={handleSubmit}
                 isSearching={isSearching}
+                codeDomain={codeDomain}
             />
             <button
                 className="w-full"

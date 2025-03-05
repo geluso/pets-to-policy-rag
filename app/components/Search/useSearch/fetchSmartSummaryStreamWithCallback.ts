@@ -1,7 +1,8 @@
-import { SourceDocument } from '@/app/types'
+import { CodeDomain, SourceDocument } from '@/app/types'
 import toast from 'react-hot-toast'
 
 export async function fetchSmartSummaryStreamWithCallback(
+    codeDomain: CodeDomain,
     query: string,
     sourceDocuments: SourceDocument[],
     onData: (delta: string) => void,
@@ -10,7 +11,7 @@ export async function fetchSmartSummaryStreamWithCallback(
         const response = await fetch('/api/smart-summaries', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({query, sourceDocuments}),
+            body: JSON.stringify({codeDomain, query, sourceDocuments}),
         })
 
         if (!response.ok) {

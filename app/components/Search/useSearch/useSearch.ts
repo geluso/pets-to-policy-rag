@@ -1,12 +1,12 @@
 import { getChunks } from '@/app/lib/rag_server/api'
-import { SearchStatus, SmartSummary, SourceDocument } from '@/app/types'
+import { CodeDomain, SearchStatus, SmartSummary, SourceDocument } from '@/app/types'
 import { useCallback, useState } from 'react'
 import useSmartSummary from './useSmartSummary'
 import useSourceDocuments from './useSourceDocuments'
 import { fetchChunkCollections } from './fetchChunkCollections'
 import toast from 'react-hot-toast'
 
-export default function useSearch(): {
+export default function useSearch(codeDomain: CodeDomain): {
     search: (query: string) => Promise<void>
     searchStatus: SearchStatus
     smartSummary: SmartSummary
@@ -21,10 +21,11 @@ export default function useSearch(): {
             resetSmartSummary()
             resetSourceDocuments()
             setSearchStatus(SearchStatus.FINDING_CHUNKS)
-            const foundChunks = await getChunks(query, 3)
+            const foundChunks = await getChunks(codeDomain, query, 3)
 
             if (foundChunks.length === 0) {
                 console.warn(`No chunks found for query: ${query}`)
+                toast.error('Search returned no results')
                 setSearchStatus(SearchStatus.DEFAULT)
                 return
             }
@@ -32,10 +33,10 @@ export default function useSearch(): {
             const chunkCollections = await fetchChunkCollections(foundChunks)
 
             setSearchStatus(SearchStatus.GENERATING_DOCUMENTS)
-            await generateSourceDocuments(query, chunkCollections)
+            await generateSourceDocuments(codeDomain, query, chunkCollections)
 
             setSearchStatus(SearchStatus.GENERATING_SUMMARY)
-            await generateSmartSummary(query, sourceDocuments)
+            await generateSmartSummary(codeDomain, query, sourceDocuments)
         } catch (error) {
             console.error('USE SEARCH', error)
 

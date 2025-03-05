@@ -1,5 +1,5 @@
-import { Chunk, SummaryReadable, ChunkCollection, SimilarChunk } from "@/app/types";
-import toast from "react-hot-toast";
+import { Chunk, SummaryReadable, ChunkCollection, SimilarChunk } from "@/app/types"
+import toast from "react-hot-toast"
 
 async function fetchSummaryReadable({url}: SimilarChunk): Promise<SummaryReadable | null> {
     try {

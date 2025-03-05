@@ -39,3 +39,8 @@ export enum SearchStatus {
     GENERATING_SUMMARY = 'Generating Summary',
     GENERATING_DOCUMENTS = 'Generating Documents',
 }
+
+export enum CodeDomain {
+    LABOR = 'labor',
+    EDUCATION = 'education',
+}

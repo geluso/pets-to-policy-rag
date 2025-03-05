@@ -2,7 +2,7 @@
 
 import { NextRequest } from 'next/server'
 import OpenAI from 'openai'
-import { SourceDocument } from '@/app/types'
+import { CodeDomain, SourceDocument } from '@/app/types'
 import { generateOuterSystemPrompt } from '@/app/prompts/generateOuterSystemPrompt'
 import { generateSmartSummaryPrompt } from '@/app/prompts/generateSmartSummaryPrompt'
 
@@ -12,6 +12,7 @@ export async function POST(req: NextRequest) {
     try {
         const json = await req.json()
         const query: string = json.query
+        const codeDomain: CodeDomain = json.codeDomain
         const sourceDocuments: SourceDocument[] = json.sourceDocuments
         const encoder = new TextEncoder()
         const readableStream = new ReadableStream({
@@ -20,8 +21,8 @@ export async function POST(req: NextRequest) {
                     const stream = openai.beta.chat.completions.stream({
                         model: 'gpt-4o',
                         messages: [
-                            {role: 'system', content: generateOuterSystemPrompt()},
-                            {role: 'user', content: generateSmartSummaryPrompt(query, sourceDocuments)},
+                            {role: 'system', content: generateOuterSystemPrompt(codeDomain)},
+                            {role: 'user', content: generateSmartSummaryPrompt(codeDomain, query, sourceDocuments)},
                         ]
                     })
                     .on('refusal.done', () => console.log('request refused'))

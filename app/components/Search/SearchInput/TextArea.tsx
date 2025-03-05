@@ -1,3 +1,4 @@
+import { CodeDomain } from '@/app/types'
 import { ChangeEvent, KeyboardEvent } from 'react'
 
 interface Props {
@@ -5,9 +6,10 @@ interface Props {
     setInputValue: (text: string) => void
     onSubmit: (text: string) => void
     isSearching: boolean
+    codeDomain: CodeDomain
 }
 
-export default function TextArea({inputValue, setInputValue, onSubmit, isSearching}: Props) {
+export default function TextArea({inputValue, setInputValue, onSubmit, isSearching, codeDomain}: Props) {
     const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         setInputValue(e.target.value)
     }
@@ -31,7 +33,7 @@ export default function TextArea({inputValue, setInputValue, onSubmit, isSearchi
             value={inputValue}
             onChange={handleChange}
             onKeyDown={handleEnterPress}
-            placeholder={`Ask me something about the laws of the land`}
+            placeholder={`Ask me a question about ${codeDomain} laws and regulations`}
             className="w-full box-border outline-none resize-none leading-[22px] p-1"
             autoFocus
             rows={3}

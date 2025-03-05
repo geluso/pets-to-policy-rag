@@ -1,6 +1,6 @@
 'use server'
 
-import { SimilarChunk } from '@/app/types'
+import { CodeDomain, SimilarChunk } from '@/app/types'
 import { preprocessQuery } from './preprocessQuery'
 
 // const LOCAL_URL_BASE = 'http://localhost:8080'
@@ -9,12 +9,16 @@ const NGROK_URL_BASE = 'https://4cb3-2601-602-8b82-92b0-64d0-4b7b-a51a-85fb.ngro
 const URL_BASE = NGROK_URL_BASE
 const URL_SEARCH = URL_BASE + '/search/'
 
-export async function getChunks(query: string, count = 3): Promise<SimilarChunk[]> {
+export async function getChunks(codeDomain: CodeDomain, query: string, count = 3): Promise<SimilarChunk[]> {
     try {
         const preprocessedQuery = await preprocessQuery(query)
 
-        const url = `${URL_SEARCH}?q=${encodeURIComponent(preprocessedQuery)}&limit=${count}`
-        
+        let url = `${URL_SEARCH}?q=${encodeURIComponent(preprocessedQuery)}&limit=${count}`
+
+        if (codeDomain === CodeDomain.EDUCATION) {
+            url = url + '&dataset=tx-education'
+        }
+
         const response = await fetch(url)
         
         if (!response.ok) {
