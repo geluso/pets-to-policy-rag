@@ -1,8 +1,9 @@
 import { errorCodeToMessage, errorFailedFetchingSourceDocs, errorSourceDocValidationFailed } from '@/app/errors'
-import { ChunkCollection, CodeDomain, SourceDocument } from '@/app/types'
+import { ChunkCollection, CodeDomain, SourceDocument, StateDomain } from '@/app/types'
 import toast from 'react-hot-toast'
 
 export async function fetchSourceDocument(
+    stateDomain: StateDomain,
     codeDomain: CodeDomain,
     query: string,
     chunkCollection: ChunkCollection,
@@ -11,7 +12,7 @@ export async function fetchSourceDocument(
         const response = await fetch('/api/source-documents', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({codeDomain, query, chunkCollection}),
+            body: JSON.stringify({stateDomain, codeDomain, query, chunkCollection}),
         })
 
         if (!response.ok) {
@@ -38,6 +39,7 @@ export async function fetchSourceDocument(
 }
 
 export async function fetchSourceDocuments(
+    stateDomain: StateDomain,
     codeDomain: CodeDomain,
     query: string,
     chunkCollections: ChunkCollection[],
@@ -45,7 +47,7 @@ export async function fetchSourceDocuments(
     const results = await Promise.all(
         chunkCollections.map(async (chunkCollection) => {
             try {
-                return await fetchSourceDocument(codeDomain, query, chunkCollection)
+                return await fetchSourceDocument(stateDomain, codeDomain, query, chunkCollection)
             } catch (error) {
                 console.warn(`Skipping failed fetch for chunk: ${chunkCollection.summaryReadable.url}`, error)
                 const message = errorCodeToMessage(error)

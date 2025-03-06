@@ -33,7 +33,7 @@ export default function useSearch(codeDomain: CodeDomain, stateDomain: StateDoma
             const chunkCollections = await fetchChunkCollections(foundChunks)
 
             setSearchStatus(SearchStatus.GENERATING_DOCUMENTS)
-            await generateSourceDocuments(codeDomain, query, chunkCollections)
+            await generateSourceDocuments(stateDomain, codeDomain, query, chunkCollections)
 
             setSearchStatus(SearchStatus.GENERATING_SUMMARY)
             await generateSmartSummary(codeDomain, query, sourceDocuments)

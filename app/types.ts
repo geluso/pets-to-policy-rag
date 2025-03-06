@@ -26,9 +26,13 @@ export type SmartSummary = string
 export interface SourceDocument {
     url: string
     question: string
-    citation: string
-    relevantKeywords: string
-    relevantSubsections: string
+    citation: {
+        title: string
+        chapter: string
+        section: string
+    }
+    relevantKeywords: string[]
+    relevantSubsections: string[]
     relevantLanguage: string
 }
 

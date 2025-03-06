@@ -51,7 +51,11 @@ export default function Search({codeDomain, stateDomain}: Props) {
                         ) : null}
                         <div className="flex flex-col w-full h-full gap-4" ref={contentRef}>
                             <SmartSummary smartSummary={smartSummary} />
-                            <SourceDocuments sourceDocuments={sourceDocuments} />
+                            <SourceDocuments
+                                stateDomain={stateDomain}
+                                codeDomain={codeDomain}
+                                sourceDocuments={sourceDocuments}
+                            />
                         </div>
                     </div>
                     <SearchStatusLoader searchStatus={searchStatus} />

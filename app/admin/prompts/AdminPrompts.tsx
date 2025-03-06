@@ -1,10 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
 
 import UneditablePrompt from "@/app/components/UneditablePrompt";
-import { generateOuterSystemPrompt } from "@/app/constants/prompts/generateOuterSystemPrompt";
-import { generateQueryPrompt } from "@/app/constants/prompts/generateQueryPrompt";
-import { generateSmartSummaryPrompt } from "@/app/constants/prompts/generateSmartSummaryPrompt";
-import { generateSourceDocumentPrompt } from "@/app/constants/prompts/generateSourceDocumentPrompt";
+import { generateOuterSystemPrompt } from "@/app/prompts/generateOuterSystemPrompt";
+import { generateQueryPrompt } from "@/app/prompts/generateQueryPrompt";
+import { generateSmartSummaryPrompt } from "@/app/prompts/generateSmartSummaryPrompt";
+import { generateSourceDocumentPrompt } from "@/app/prompts/generateSourceDocumentPrompt";
 import { CodeDomain } from "@/app/types";
 
 export interface Chunk {
@@ -83,13 +83,13 @@ export default function AdminPrompts() {
       summary in order to provide additional information in the Smart Summary to
       answer a user's query.
     </p>
-    <UneditablePrompt text={generateSmartSummaryPrompt(exampleDomain, exampleQuery, exampleSourceDocuments)} />
+    {/* <UneditablePrompt text={generateSmartSummaryPrompt(exampleDomain, exampleQuery, exampleSourceDocuments)} /> */}
 
     <h2>Source Document Prompt</h2>
     <p>
       This prompt takes in chunk matches and a summary readable and extracts
       and highlights important information relevant to the user's query.
     </p>
-    <UneditablePrompt text={generateSourceDocumentPrompt(exampleDomain, exampleQuery, exampleChunkCollection[0])} />
+    {/* <UneditablePrompt text={generateSourceDocumentPrompt(exampleDomain, exampleQuery, exampleChunkCollection[0])} /> */}
   </div>
 }
