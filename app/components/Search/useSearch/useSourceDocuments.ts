@@ -1,4 +1,4 @@
-import { ChunkCollection, CodeDomain, SourceDocument } from '@/app/constants/types'
+import { ChunkCollection, CodeDomain, SourceDocument } from '@/app/types'
 import { useCallback, useState } from 'react'
 import { fetchSourceDocuments } from './fetchSourceDocuments'
 

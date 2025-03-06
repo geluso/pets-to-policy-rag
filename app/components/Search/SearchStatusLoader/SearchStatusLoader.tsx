@@ -1,4 +1,4 @@
-import { SearchStatus } from '@/app/constants/types'
+import { SearchStatus } from '@/app/types'
 import useEllipsis from "./useEllipses"
 
 interface Props {

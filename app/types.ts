@@ -42,5 +42,9 @@ export enum SearchStatus {
 export enum CodeDomain {
     LABOR = 'labor',
     EDUCATION = 'education',
-    SOUTH_CAROLINA_LABOR = 'sc-labor',
+}
+
+export enum StateDomain {
+    TEXAS = 'texas',
+    SOUTH_CAROLINA = 'south carolina'
 }

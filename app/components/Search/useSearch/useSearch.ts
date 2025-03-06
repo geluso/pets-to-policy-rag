@@ -1,12 +1,12 @@
 import { getChunks } from '@/app/lib/rag_server/api'
-import { CodeDomain, SearchStatus, SmartSummary, SourceDocument } from '@/app/constants/types'
+import { CodeDomain, SearchStatus, SmartSummary, SourceDocument, StateDomain } from '@/app/types'
 import { useCallback, useState } from 'react'
 import useSmartSummary from './useSmartSummary'
 import useSourceDocuments from './useSourceDocuments'
 import { fetchChunkCollections } from './fetchChunkCollections'
 import toast from 'react-hot-toast'
 
-export default function useSearch(codeDomain: CodeDomain): {
+export default function useSearch(codeDomain: CodeDomain, stateDomain: StateDomain): {
     search: (query: string) => Promise<void>
     searchStatus: SearchStatus
     smartSummary: SmartSummary
@@ -21,7 +21,7 @@ export default function useSearch(codeDomain: CodeDomain): {
             resetSmartSummary()
             resetSourceDocuments()
             setSearchStatus(SearchStatus.FINDING_CHUNKS)
-            const foundChunks = await getChunks(codeDomain, query, 3)
+            const foundChunks = await getChunks(stateDomain, codeDomain, query, 3)
 
             if (foundChunks.length === 0) {
                 console.warn(`No chunks found for query: ${query}`)

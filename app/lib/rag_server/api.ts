@@ -1,7 +1,8 @@
 'use server'
 
-import { CodeDomain, SimilarChunk } from '@/app/constants/types'
+import { CodeDomain, SimilarChunk, StateDomain } from '@/app/types'
 import { preprocessQuery } from './preprocessQuery'
+import { mapDomainsToSearchParams } from './mapDomainsToSearchParams'
 
 // const LOCAL_URL_BASE = 'http://localhost:8080'
 const NGROK_URL_BASE = 'https://4cb3-2601-602-8b82-92b0-64d0-4b7b-a51a-85fb.ngrok-free.app'
@@ -9,17 +10,18 @@ const NGROK_URL_BASE = 'https://4cb3-2601-602-8b82-92b0-64d0-4b7b-a51a-85fb.ngro
 const URL_BASE = NGROK_URL_BASE
 const URL_SEARCH = URL_BASE + '/search/'
 
-export async function getChunks(codeDomain: CodeDomain, query: string, count = 3): Promise<SimilarChunk[]> {
+export async function getChunks(
+    stateDomain: StateDomain,
+    codeDomain: CodeDomain,
+    query: string,
+    count = 3,
+): Promise<SimilarChunk[]> {
     try {
         const preprocessedQuery = await preprocessQuery(query)
 
         let url = `${URL_SEARCH}?q=${encodeURIComponent(preprocessedQuery)}&limit=${count}`
 
-        if (codeDomain === CodeDomain.EDUCATION) {
-            url = url + '&dataset=tx-education'
-        } else if (codeDomain === CodeDomain.SOUTH_CAROLINA_LABOR) {
-            url = url + '&dataset=sc-labor'
-        }
+        url = url + mapDomainsToSearchParams(stateDomain, codeDomain)
 
         const response = await fetch(url)
         

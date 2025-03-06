@@ -1,18 +1,18 @@
 "use client"
 
-import { CodeDomain } from "@/app/constants/types"
+import { CodeDomain, StateDomain } from "@/app/types"
+import { capitalizeWords } from "@/app/utils"
 
-export default function Header({ codeDomain }: { codeDomain: CodeDomain }) {
-    let codeDomainDescription = "Texas Labor Code"
-    if (codeDomain == CodeDomain.EDUCATION) {
-        codeDomainDescription = "Texas Education Code"
-    } else if (codeDomain == CodeDomain.SOUTH_CAROLINA_LABOR) {
-        codeDomainDescription = "South Carolina Labor Code"
-    }
+interface Props {
+    stateDomain: StateDomain
+    codeDomain: CodeDomain
+}
+
+export default function Header({codeDomain, stateDomain}: Props) {
     return (
         <div className="flex w-full bg-blue-500 border-solid border-t-0 border-l-0 border-r-0 border-gray-500">
             <h1 className="m-0 p-4 text-white">
-                PETs to Policy: {codeDomainDescription}
+                PETs to Policy: {capitalizeWords(stateDomain)} {capitalizeWords(codeDomain)} Code
             </h1>
         </div>
     )

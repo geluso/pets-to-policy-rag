@@ -1,4 +1,4 @@
-import { SourceDocument, CodeDomain } from '../types'
+import { CodeDomain, SourceDocument } from "../types";
 
 export const generateSmartSummaryPrompt = (codeDomain: CodeDomain, query: string, sourceDocuments: SourceDocument[]): string => {
     const sourceDocumentBlocks = JSON.stringify(sourceDocuments, null, 2);

@@ -1,10 +1,10 @@
 'use server'
 
-import { generateOuterSystemPrompt } from '@/app/constants/prompts/generateOuterSystemPrompt'
-import { generateQueryPrompt } from '@/app/constants/prompts/generateQueryPrompt'
+import { generateOuterSystemPrompt } from '@/app/prompts/generateOuterSystemPrompt'
+import { generateQueryPrompt } from '@/app/prompts/generateQueryPrompt'
 import OpenAI from 'openai'
 
-const openai = new OpenAI()
+const openai = new OpenAI({})
 
 export async function preprocessQuery(query: string): Promise<string> {
     const completion = await openai.chat.completions.create({
@@ -13,6 +13,7 @@ export async function preprocessQuery(query: string): Promise<string> {
             {role: 'system', content: generateOuterSystemPrompt()},
             {role: 'user', content: generateQueryPrompt(query)},
         ],
+        
     })
 
     return completion.choices[0].message.content ?? ''

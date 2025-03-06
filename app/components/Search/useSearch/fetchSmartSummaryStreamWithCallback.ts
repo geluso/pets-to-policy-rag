@@ -1,4 +1,4 @@
-import { CodeDomain, SourceDocument } from '@/app/constants/types'
+import { CodeDomain, SourceDocument } from '@/app/types'
 import toast from 'react-hot-toast'
 
 export async function fetchSmartSummaryStreamWithCallback(

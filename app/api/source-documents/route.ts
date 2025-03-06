@@ -4,10 +4,10 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
-import { ChunkCollection, CodeDomain } from '@/app/constants/types'
+import { ChunkCollection, CodeDomain } from '@/app/types'
 import { generateSourceDocumentJsonSchema, generateSourceDocumentZodSchema } from './utils'
-import { generateSourceDocumentPrompt } from '@/app/constants/prompts/generateSourceDocumentPrompt'
-import { generateOuterSystemPrompt } from '@/app/constants/prompts/generateOuterSystemPrompt'
+import { generateSourceDocumentPrompt } from '@/app/prompts/generateSourceDocumentPrompt'
+import { generateOuterSystemPrompt } from '@/app/prompts/generateOuterSystemPrompt'
 
 const openai = new OpenAI()
 
