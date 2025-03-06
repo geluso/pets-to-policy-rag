@@ -11,6 +11,7 @@ import { generateOuterSystemPrompt } from '@/app/constants/prompts/generateOuter
 
 const openai = new OpenAI()
 
+
 export async function POST(req: NextRequest) {
     try {
         const json = await req.json()
