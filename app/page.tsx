@@ -1,13 +1,6 @@
-import { Suspense } from 'react'
-import Search from './components/Search/Search'
-import Toast from './components/Toast'
-import { CodeDomain, StateDomain } from './types'
+import { Routes } from './types'
+import { redirect } from 'next/navigation'
 
-export default async function SearchPage() {
-    return (
-        <Suspense fallback={<>Loading...</>}>
-            <Search codeDomain={CodeDomain.LABOR} stateDomain={StateDomain.TEXAS} />
-            <Toast />
-        </Suspense>
-    )
+export default async function LandingPage() {
+    redirect(Routes.TX_LABOR)
 }

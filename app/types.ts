@@ -25,7 +25,6 @@ export type SmartSummary = string
 
 export interface SourceDocument {
     url: string
-    question: string
     citation: {
         title: string
         chapter: string
@@ -50,5 +49,11 @@ export enum CodeDomain {
 
 export enum StateDomain {
     TEXAS = 'texas',
-    SOUTH_CAROLINA = 'south carolina'
+    SOUTH_CAROLINA = 'south carolina',
+}
+
+export enum Routes {
+    TX_LABOR = 'texas-labor',
+    TX_EDUCATION = 'texas-education',
+    SC_LABOR = 'south-carolina-labor',
 }

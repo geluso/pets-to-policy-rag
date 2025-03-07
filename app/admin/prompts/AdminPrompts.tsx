@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 
-import UneditablePrompt from "@/app/components/UneditablePrompt";
+import UneditablePrompt from "@/app/components/Admin/UneditablePrompt";
 import { generateOuterSystemPrompt } from "@/app/prompts/generateOuterSystemPrompt";
 import { generateQueryPrompt } from "@/app/prompts/generateQueryPrompt";
 import { generateSmartSummaryPrompt } from "@/app/prompts/generateSmartSummaryPrompt";

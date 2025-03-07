@@ -21,13 +21,12 @@ export async function fetchSourceDocument(
 
         const data = await response.json()
 
-        if (!data.question || !data.citation || !data.relevantSubsections || !data.relevantLanguage) {
+        if (!data.url || !data.citation || !data.relevantKeywords || !data.relevantSubsections || !data.relevantLanguage) {
             throw errorSourceDocValidationFailed
         }
 
         return {
             url: data.url,
-            question: data.question,
             citation: data.citation,
             relevantKeywords: data.relevantKeywords,
             relevantSubsections: data.relevantSubsections,

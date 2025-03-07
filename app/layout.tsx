@@ -20,8 +20,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({children}: PropsWithChildren) {
     return (
-        <html lang="en" className="w-full h-full m-0 p-0">
-            <body className={`${geistSans.variable} ${geistMono.variable} antialiased w-full h-full m-0 p-0`}>
+        <html lang="en" className="h-full w-full m-0 p-0">
+            <body className="h-full w-full m-0 p-0 flex flex-col">
                 {children}
             </body>
         </html>

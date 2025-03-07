@@ -1,5 +1,5 @@
 import { SearchStatus } from '@/app/types'
-import useEllipsis from "./useEllipses"
+import useEllipsis from './useEllipses'
 
 interface Props {
     searchStatus: SearchStatus
@@ -12,5 +12,9 @@ export default function SearchStatusLoader({searchStatus}: Props) {
         return null
     }
 
-    return <div className="p-2">{searchStatus}{ellipsis}</div>
+    return (
+        <div className="p-2 text-white text-sm font-medium">
+            {searchStatus}{ellipsis}
+        </div>
+    )
 }
