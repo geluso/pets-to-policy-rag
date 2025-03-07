@@ -1,11 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
-// @typescript-eslint/no-unused-vars
 
 import UneditablePrompt from "@/app/components/Admin/UneditablePrompt";
 import { generateOuterSystemPrompt } from "@/app/prompts/generateOuterSystemPrompt";
 import { generateQueryPrompt } from "@/app/prompts/generateQueryPrompt";
-import { generateSmartSummaryPrompt } from "@/app/prompts/generateSmartSummaryPrompt";
-import { generateSourceDocumentPrompt } from "@/app/prompts/generateSourceDocumentPrompt";
+// import { generateSmartSummaryPrompt } from "@/app/prompts/generateSmartSummaryPrompt";
+// import { generateSourceDocumentPrompt } from "@/app/prompts/generateSourceDocumentPrompt";
 import { CodeDomain } from "@/app/types";
 
 export interface Chunk {
@@ -36,28 +35,28 @@ export default function AdminPrompts() {
   const exampleDomain = CodeDomain.LABOR
   const exampleQuery = "EXAMPLE USER QUERY"
 
-  const exampleSummaryReadable: SummaryReadable = {
-    url: "http://example.com",
-    summaryText: "EXAMPLE TEXT",
-  }
+  // const exampleSummaryReadable: SummaryReadable = {
+  //   url: "http://example.com",
+  //   summaryText: "EXAMPLE TEXT",
+  // }
 
-  const exampleChunkCollection: ChunkCollection[] = [{
-    summaryReadable: exampleSummaryReadable,
-    chunks: [
-      { id: 1, url: "EXAMPLE", chunk_text: "EXAMPLE", chunk_index: 1},
-      { id: 99, url: "EXAMPLE", chunk_text: "EXAMPLE", chunk_index: 1},
-      { id: 444, url: "EXAMPLE", chunk_text: "EXAMPLE", chunk_index: 1},
-    ]
-  }]
+  // const exampleChunkCollection: ChunkCollection[] = [{
+  //   summaryReadable: exampleSummaryReadable,
+  //   chunks: [
+  //     { id: 1, url: "EXAMPLE", chunk_text: "EXAMPLE", chunk_index: 1},
+  //     { id: 99, url: "EXAMPLE", chunk_text: "EXAMPLE", chunk_index: 1},
+  //     { id: 444, url: "EXAMPLE", chunk_text: "EXAMPLE", chunk_index: 1},
+  //   ]
+  // }]
 
-  const exampleSourceDocuments = [{
-      url: "EXAMPLE URL",
-      question: "EXAMPLE QUESTION",
-      citation: "EXAMPLE CITATION",
-      relevantKeywords: "EXAMPLE RELEVANT KEYWORDS",
-      relevantSubsections: "EXAMPLE RELEVANT SUBSECTOINS",
-      relevantLanguage: "EXAMPLE RELEVANT LANGUAGE"
-  }]
+  // const exampleSourceDocuments = [{
+  //     url: "EXAMPLE URL",
+  //     question: "EXAMPLE QUESTION",
+  //     citation: "EXAMPLE CITATION",
+  //     relevantKeywords: "EXAMPLE RELEVANT KEYWORDS",
+  //     relevantSubsections: "EXAMPLE RELEVANT SUBSECTOINS",
+  //     relevantLanguage: "EXAMPLE RELEVANT LANGUAGE"
+  // }]
 
   return <div>
     <h1>Admin Prompts</h1>
