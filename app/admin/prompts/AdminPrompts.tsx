@@ -1,4 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
+// @typescript-eslint/no-unused-vars
 
 import UneditablePrompt from "@/app/components/Admin/UneditablePrompt";
 import { generateOuterSystemPrompt } from "@/app/prompts/generateOuterSystemPrompt";
