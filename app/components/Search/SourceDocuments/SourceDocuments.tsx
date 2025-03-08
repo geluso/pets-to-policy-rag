@@ -1,5 +1,6 @@
 import { CodeDomain, SourceDocument, StateDomain } from '@/app/types'
 import Card from './Card'
+import { reduceSourceDocumentsToUniqueCards } from './utils/reduceSourceDocumentsToUniqueCards'
 
 interface Props {
     sourceDocuments: SourceDocument[]
@@ -12,6 +13,8 @@ export default function SourceDocuments({sourceDocuments, stateDomain, codeDomai
         return null
     }
 
+    const cards = reduceSourceDocumentsToUniqueCards(stateDomain, codeDomain, sourceDocuments)
+
     return (
         <div className="w-full flex justify-center p-16 border-b-[1px] border-b-[#B2B2B2] border-solid border-t-0 border-l-0 border-r-0">
             <div className="max-w-[1070px] flex flex-col gap-6">
@@ -20,8 +23,8 @@ export default function SourceDocuments({sourceDocuments, stateDomain, codeDomai
                     <div className="font-thin text-[#757575]">related to your inquiry</div>
                 </div>
                 <div className="flex flex-col gap-5">
-                    {sourceDocuments.map((sourceDocument, index) => (
-                        <Card key={index} {...sourceDocument} stateDomain={stateDomain} codeDomain={codeDomain} />
+                    {cards.map((card) => (
+                        <Card key={card.citation} {...card} />
                     ))}
                 </div>
             </div>

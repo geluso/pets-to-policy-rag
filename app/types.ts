@@ -25,14 +25,10 @@ export type SmartSummary = string
 
 export interface SourceDocument {
     url: string
-    citation: {
-        title: string
-        chapter: string
-        section: string
-    }
     relevantKeywords: string[]
     relevantSubsections: string[]
     relevantLanguage: string
+    section: string
 }
 
 export enum SearchStatus {

@@ -1,28 +1,17 @@
 import { CodeDomain, SourceDocument, StateDomain } from '@/app/types'
-import { parseRelevantLanguage } from './parseRelevantLanguage'
-import { stateAbbreviationDictionary } from './stateAbbreviationDictionary'
-import { capitalizeWords } from '@/app/utils'
+import { parseRelevantLanguage } from './utils/parseRelevantLanguage'
 
-interface Props extends SourceDocument {
-    stateDomain: StateDomain
-    codeDomain: CodeDomain
+export interface Props extends Omit<SourceDocument, 'section'> {
+    citation: string
 }
 
 export default function Card({
-    stateDomain,
-    codeDomain,
     relevantSubsections,
     relevantKeywords,
     relevantLanguage,
     url,
-    citation: {
-        title,
-        chapter,
-        section,
-    }
+    citation,
 }: Props) {
-    const citation = `${stateAbbreviationDictionary[stateDomain]} ${capitalizeWords(codeDomain)} Code §${title}.${chapter}.${section}`
-
     const handleUrlClick = (url: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
         event.preventDefault()
         window.open(url, '_blank', 'noopener,noreferrer')

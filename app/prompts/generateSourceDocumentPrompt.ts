@@ -39,14 +39,11 @@ Your response **must be structured JSON** that conforms to the schema below.
 ## **MATCHED CHUNK COLLECTION**
 This JSON object contains **retrieved legal text excerpts** and their corresponding summary.  
 Use this data to:
-1. **Extract the title (a number) from the Summary Readable.**
-2. **Extract the chapter as a string**  
-   - If a subchapter exists, **combine it with the chapter as one string** (e.g., \`"51B"\`).  
-3. **Extract the section number using the following method:**  
+1. **Extract the section number using the following method:**  
 ${sectionExtractionInstruction}
-4. **Identify and extract an array of relevant subsections (only letters, e.g., \`["a", "c"]\`).**  
-5. **Extract and highlight entire legal phrases or full sentences** that best explain the legal answer.  
-6. **Derive "relevantKeywords" as an array from the extracted legal text** based on its meaning—not just predefined ontology terms.  
+2. **Identify and extract an array of relevant subsections (only letters, e.g., \`["a", "c"]\`).**  
+3. **Extract and highlight entire legal phrases or full sentences** that best explain the legal answer.  
+4. **Derive "relevantKeywords" as an array from the extracted legal text** based on its meaning—not just predefined ontology terms.  
 
 ### HIGHLIGHTING REQUIREMENTS
 - Highlight **full phrases or sentences** that provide **both the subject and the critical legal context** relevant to the query.  
@@ -83,8 +80,6 @@ ${chunkBlock}
 ---
 
 ## **STANDARDIZATION REQUIREMENTS**
-- **Store the title as a number** (e.g., \\\`"30"\\\` for **Title 30** of the code).  
-- **Store the chapter as a string** (e.g., \\\`"51B"\\\` for **Chapter 51, Subchapter B**).  
 - **Store the section as a string**, extracted based on \`${stateDomain}\` format.  
 - **Highlight entire meaningful legal phrases or sentences** that best answer the user query using \`{{HIGHLIGHT}}\`.  
 - **Ensure "relevantKeywords" is populated as an array**, derived dynamically from the extracted legal text.  
@@ -99,11 +94,7 @@ Your response **must be in valid JSON** with the following structure:
 
 \`\`\`json
 {
-  "citation": {
-    "title": "30",
-    "chapter": "51B",
-    "section": "21"
-  },
+  "section": "21"
   "relevantSubsections": ["c", "e"],
   "relevantKeywords": ["confidential", "privileged", "compliance program", "disclosure", "investigation"],
   "relevantLanguage": "SECTION 30-2-20. (A) {{HIGHLIGHT}}Agencies must ensure that all personal data is collected and secured properly.{{HIGHLIGHT}} Any unauthorized disclosure shall be subject to penalties."

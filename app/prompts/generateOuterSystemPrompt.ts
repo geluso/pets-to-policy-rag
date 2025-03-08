@@ -34,7 +34,6 @@ Your task is to **maintain consistency** across all pipeline components by ensur
 ### STANDARDIZATION REQUIREMENTS:
 - **All responses must use legally precise terminology.**
 - **Queries should be reformatted into legal phrasing.**
-- **Legal citations must be properly formatted (Code, Chapter, Section, Subsection).**
 - **Extracted legal text should be structured and flagged for importance.**
 - **No additional explanations should be provided—only the required output.**
 `
