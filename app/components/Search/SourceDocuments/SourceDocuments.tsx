@@ -10,14 +10,17 @@ interface Props {
 }
 
 export default function SourceDocuments({sourceDocuments, stateDomain, codeDomain}: Props) {
-    if (!sourceDocuments.length) {
+    const cards = useMemo(() => {
+        if (!sourceDocuments.length) {
+            return []
+        }
+
+        return reduceSourceDocumentsToUniqueCards(stateDomain, codeDomain, sourceDocuments)
+    }, [stateDomain, codeDomain, sourceDocuments])
+    
+    if (!cards.length) {
         return null
     }
-
-    const cards = useMemo(() =>
-        reduceSourceDocumentsToUniqueCards(stateDomain, codeDomain, sourceDocuments),
-        [stateDomain, codeDomain, sourceDocuments],
-    )
 
     return (
         <div className="w-full flex justify-center p-16 border-b-[1px] border-b-[#B2B2B2] border-solid border-t-0 border-l-0 border-r-0">
