@@ -1,4 +1,4 @@
-import { CodeDomain, SourceDocument, StateDomain } from '@/app/types'
+import { SourceDocument } from '@/app/types'
 import { parseRelevantLanguage } from './utils/parseRelevantLanguage'
 
 export interface Props extends Omit<SourceDocument, 'section'> {

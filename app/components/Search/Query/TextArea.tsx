@@ -37,7 +37,7 @@ export default function TextArea({
     }
 
     return (
-        <div className="w-full max-w-[680px] p-4 flex bg-white rounded-lg">
+        <div className="w-full max-w-[680px] p-4 flex gap-4 bg-white rounded-lg">
             <textarea
                 disabled={isSearching}
                 value={inputValue}
