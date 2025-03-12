@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 'use client'
 
 import SmartSummary from './SmartSummary'
@@ -5,12 +7,11 @@ import useSearch from './useSearch/useSearch'
 import SourceDocuments from './SourceDocuments/SourceDocuments'
 import Header from './Header'
 import { CodeDomain, SearchStatus, StateDomain } from '@/app/types'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useReactToPrint } from 'react-to-print'
 import Hero from './Hero/Hero'
 import Query from './Query/Query'
 import Footer from './Footer'
-import { stateAbbreviationDictionary } from './utils/stateAbbreviationDictionary'
 import pdfFilename from './utils/pdfFilename'
 
 interface Props {
