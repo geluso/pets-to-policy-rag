@@ -2,11 +2,7 @@ import { CodeDomain, SourceDocument, StateDomain } from '@/app/types'
 import { Props as CardProps } from '../Card'
 import { mapUrlToChapterAndTitle } from './mapUrlToTitleAndChapter'
 import { capitalizeWords } from '@/app/utils'
-
-const stateAbbreviationDictionary = {
-    [StateDomain.SOUTH_CAROLINA]: 'SC',
-    [StateDomain.TEXAS]: 'TX',
-}
+import { stateAbbreviationDictionary } from '../../utils/stateAbbreviationDictionary'
 
 export const reduceSourceDocumentsToUniqueCards = (
     stateDomain: StateDomain,
