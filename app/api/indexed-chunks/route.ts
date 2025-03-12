@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
             where: {
                 url: url,
                 chunk_index: {
-                    gte: Math.max(chunkIndex - 2, 1), // Prevent negative indexes
+                    gte: Math.max(chunkIndex - 2, 0), // Prevent negative indexes
                     lte: chunkIndex + 2
                 }
             },
