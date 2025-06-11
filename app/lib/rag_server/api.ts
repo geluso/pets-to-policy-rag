@@ -5,7 +5,7 @@ import { preprocessQuery } from './preprocessQuery'
 import { mapDomainsToSearchParams } from './mapDomainsToSearchParams'
 
 // const LOCAL_URL_BASE = 'http://localhost:8080'
-const NGROK_URL_BASE = 'https://d9e5-2601-602-8b82-92b0-a006-1ee0-efea-f206.ngrok-free.app'
+const NGROK_URL_BASE = 'https://d29d-2601-602-8b82-92b0-fc10-9a2c-4785-d9d2.ngrok-free.app'
 
 const URL_BASE = NGROK_URL_BASE
 const URL_SEARCH = URL_BASE + '/search/'
